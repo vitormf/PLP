@@ -3,6 +3,7 @@ package plp.expressions2.memory;
 import java.util.HashMap;
 import java.util.Stack;
 
+import plp.expressions1.memory.ContextoVazio;
 import plp.expressions2.expression.Id;
 
 /**
@@ -11,7 +12,7 @@ import plp.expressions2.expression.Id;
  * @author eagt
  * 
  */
-public class Contexto<T> {
+public class Contexto<T> extends ContextoVazio<T>{
 	/**
 	 * A pilhaValor de blocos de contexto.
 	 */
@@ -36,7 +37,7 @@ public class Contexto<T> {
 	 * Mapeia o id no valor dado.
 	 * 
 	 * @exception VariavelJaDeclaradaException
-	 *                se já existir um mapeamento do identificador nesta tabela.
+	 *                se jï¿½ existir um mapeamento do identificador nesta tabela.
 	 */
 	public void map(Id idArg, T valorId) throws VariavelJaDeclaradaException {
 		try {
@@ -52,7 +53,7 @@ public class Contexto<T> {
 	 * Retorna o valor mapeado ao id dado.
 	 * 
 	 * @exception VariavelNaoDeclaradaException
-	 *                se não existir nenhum valor mapeado ao id dado nesta
+	 *                se nï¿½o existir nenhum valor mapeado ao id dado nesta
 	 *                tabela.
 	 */
 	public T get(Id idArg) throws VariavelNaoDeclaradaException {

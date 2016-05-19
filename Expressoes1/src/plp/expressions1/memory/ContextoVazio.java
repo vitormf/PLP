@@ -1,4 +1,4 @@
-package plp.expressions2.memory;
+package plp.expressions1.memory;
 
 /**
  * Classe abstrata que representa um contexto
@@ -6,6 +6,6 @@ package plp.expressions2.memory;
  * @author eagt
  * 
  */
-public class Contexto<T> {
+public class ContextoVazio<T> {
 	
 }

@@ -1,9 +1,9 @@
 package plp.expressions1.expression;
 
+import plp.expressions1.memory.AmbienteCompilacaoVazio;
+import plp.expressions1.memory.AmbienteExecucaoVazio;
 import plp.expressions1.util.Tipo;
 import plp.expressions1.util.TipoPrimitivo;
-import plp.expressions2.memory.AmbienteCompilacao;
-import plp.expressions2.memory.AmbienteExecucao;
 
 /**
  * Um objeto desta classe representa uma Disjuncao Logica.
@@ -27,9 +27,9 @@ public class ExpOr extends ExpBinaria {
 	 * Retorna o valor da Expressao de disjuncao logica
 	 * 
 	 * @param amb
-	 *            o ambiente de execução.
+	 *            o ambiente de execuï¿½ï¿½o.
 	 */
-	public Valor avaliar(AmbienteExecucao amb) {
+	public Valor avaliar(AmbienteExecucaoVazio amb) {
 	return new ValorBooleano(
 				((ValorBooleano)getEsq().avaliar(amb)).valor() ||
 				((ValorBooleano)getDir().avaliar(amb)).valor() );
@@ -39,12 +39,12 @@ public class ExpOr extends ExpBinaria {
 	 * Realiza a verificacao de tipos desta expressao.
 	 *
 	 * @param amb
-	 *            o ambiente de compilação.
+	 *            o ambiente de compilaï¿½ï¿½o.
 	 *
 	 * @return <code>true</code> se os tipos da expressao sao validos;
 	 *         <code>false</code> caso contrario.
 	 */
-	protected boolean checaTipoElementoTerminal(AmbienteCompilacao amb) {
+	protected boolean checaTipoElementoTerminal(AmbienteCompilacaoVazio amb) {
 		return (getEsq().getTipo(amb).eBooleano() && getDir().getTipo(amb).eBooleano());
 	}
 
@@ -52,11 +52,11 @@ public class ExpOr extends ExpBinaria {
 	 * Retorna os tipos possiveis desta expressao.
 	 * 
 	 * @param amb
-	 *            o ambiente de compilação.
+	 *            o ambiente de compilaï¿½ï¿½o.
 	 * 
 	 * @return os tipos possiveis desta expressao.
 	 */
-	public Tipo getTipo(AmbienteCompilacao amb) {
+	public Tipo getTipo(AmbienteCompilacaoVazio amb) {
 		return TipoPrimitivo.BOOLEANO;
 	}
 

@@ -1,6 +1,6 @@
 package plp.expressions1.expression;
 
-import plp.expressions2.memory.AmbienteCompilacao;
+import plp.expressions1.memory.AmbienteCompilacaoVazio;
 
 /**
  * Uma expressao binaria contem duas expressoes e um operador. Ha uma ordem
@@ -80,11 +80,11 @@ public abstract class ExpBinaria implements Expressao {
 	 * Realiza a verificacao de tipos desta expressao.
 	 * 
 	 * @param amb
-	 *            o ambiente de compilação.
+	 *            o ambiente de compilaï¿½ï¿½o.
 	 * @return <code>true</code> se os tipos das subexpressoes sao validos;
 	 *         <code>false</code> caso contrario.
 	 */
-	public boolean checaTipo(AmbienteCompilacao amb) {
+	public boolean checaTipo(AmbienteCompilacaoVazio amb) {
 		boolean result;
 		if (!getEsq().checaTipo(amb) || !getDir().checaTipo(amb)) {
 			result = false;
@@ -95,11 +95,11 @@ public abstract class ExpBinaria implements Expressao {
 	}
 
 	/**
-	 * Método 'template' que será implementado nas subclasses para checar o tipo
+	 * Mï¿½todo 'template' que serï¿½ implementado nas subclasses para checar o tipo
 	 * do head terminal
 	 * @param amb
-	 *            o ambiente de compilação.
+	 *            o ambiente de compilaï¿½ï¿½o.
 	 */
-	protected abstract boolean checaTipoElementoTerminal(AmbienteCompilacao amb);
+	protected abstract boolean checaTipoElementoTerminal(AmbienteCompilacaoVazio amb);
 
 }

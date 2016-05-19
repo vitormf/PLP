@@ -1,8 +1,8 @@
 package plp.expressions1.expression;
 
+import plp.expressions1.memory.AmbienteCompilacaoVazio;
 import plp.expressions1.util.Tipo;
 import plp.expressions1.util.TipoPrimitivo;
-import plp.expressions2.memory.AmbienteCompilacao;
 
 /**
  * Objetos desta classe encapsulam valor inteiro.
@@ -17,11 +17,11 @@ public class ValorInteiro extends ValorConcreto<Integer> {
 	 * Retorna os tipos possiveis desta expressao.
 	 * 
 	 * @param amb
-	 *            o ambiente de compilação.
+	 *            o ambiente de compilaï¿½ï¿½o.
 	 * 
 	 * @return os tipos possiveis desta expressao.
 	 */
-	public Tipo getTipo(AmbienteCompilacao amb) {
+	public Tipo getTipo(AmbienteCompilacaoVazio amb) {
 		return TipoPrimitivo.INTEIRO;
 	}
 
