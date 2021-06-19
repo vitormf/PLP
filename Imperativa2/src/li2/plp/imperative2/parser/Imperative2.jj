@@ -134,6 +134,16 @@ TOKEN : /* TOKENS DE IMPERATIVA 2 */
 | < CALL: "call" >
 }
 
+TOKEN : /* TESTES */
+{
+ 	< TEST: "test" >
+| 	< TEST_SETUP: "setup" >
+| 	< TEST_TEARDOWN: "teardown" >
+| 	< ASSERT: "assert" >
+| 	< ASSERT_TRUE: "assert_true" >
+| 	< ASSERT_FALSE: "assert_false" >
+}
+
 TOKEN : /* TOKENS DOS POSS�VEIS TIPOS */
 {
   < INT : "int" >
@@ -644,6 +654,9 @@ Comando PComandoSimples() :
       | retorno = PIO()
       | <LPAREN> retorno = PComando() <RPAREN>
       | retorno = PChamadaProcedimento()
+      | retorno = PChamadaAssert()
+      | retorno = PChamadaAssertTrue()
+      | retorno = PChamadaAssertFalse()
    	)
     {
         return retorno;
@@ -661,6 +674,47 @@ ChamadaProcedimento PChamadaProcedimento():
 		return new ChamadaProcedimento(nomeProcedimento, parametrosAtuais);
 	}
 }
+
+ChamadaAssert PChamadaAssert():
+{
+	Expressao esq;
+	Expressao dir;
+}
+{
+  	
+	
+	<ASSERT> <LPAREN> esq = PExpPrimaria() <COMMA> dir = PExpressao() <RPAREN>
+	{
+		return new ChamadaAssert(esq,dir);
+	}
+}
+
+ChamadaAssert PChamadaAssertTrue():
+{
+	Expressao exp;
+}
+{
+  	
+	
+	<ASSERT_TRUE> <LPAREN> exp = PExpressao() <RPAREN>
+	{
+		return new ChamadaAssert(new ValorBooleano(true),exp);
+	}
+}
+
+ChamadaAssert PChamadaAssertFalse():
+{
+	Expressao exp;
+}
+{
+  	
+	
+	<ASSERT_FALSE> <LPAREN> exp = PExpressao() <RPAREN>
+	{
+		return new ChamadaAssert(new ValorBooleano(false),exp);
+	}
+}
+
 
 ComandoDeclaracao PComandoDeclaracao() :
 {

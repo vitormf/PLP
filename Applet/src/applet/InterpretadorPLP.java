@@ -221,6 +221,7 @@ public class InterpretadorPLP extends JFrame {
 			jComboBoxLinguagens.addItem("Orientada a Objetos 1");
 			jComboBoxLinguagens.addItem("Orientada a Objetos 2");			
 
+			jComboBoxLinguagens.setSelectedIndex(6);
 		}
 		return jComboBoxLinguagens;
 	}
