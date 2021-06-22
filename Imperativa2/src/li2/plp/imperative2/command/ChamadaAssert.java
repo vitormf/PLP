@@ -19,6 +19,14 @@ public class ChamadaAssert implements Comando {
 		this.esq = esq;
 		this.dir = dir;
 	}
+	
+	public Expressao getEsq() {
+		return esq;
+	}
+
+	public Expressao getDir() {
+		return dir;
+	}
 
 	@Override
 	public AmbienteExecucaoImperativa executar(AmbienteExecucaoImperativa ambiente)
@@ -29,7 +37,7 @@ public class ChamadaAssert implements Comando {
 		ValorConcreto dir = (ValorConcreto) this.dir.avaliar(ambiente);
 		
 		if (!esq.isEquals(dir)) {
-			throw new AssertFalhouException();
+			throw new AssertFalhouException(ambiente, this);
 		}
 		
 		return ambiente;

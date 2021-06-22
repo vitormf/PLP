@@ -137,8 +137,8 @@ TOKEN : /* TOKENS DE IMPERATIVA 2 */
 TOKEN : /* TESTES */
 {
  	< TEST: "test" >
-| 	< TEST_SETUP: "setup" >
-| 	< TEST_TEARDOWN: "teardown" >
+| 	< TEST_SETUP: "test_setup" >
+| 	< TEST_TEARDOWN: "test_teardown" >
 | 	< ASSERT: "assert" >
 | 	< ASSERT_TRUE: "assert_true" >
 | 	< ASSERT_FALSE: "assert_false" >
@@ -654,6 +654,7 @@ Comando PComandoSimples() :
       | retorno = PIO()
       | <LPAREN> retorno = PComando() <RPAREN>
       | retorno = PChamadaProcedimento()
+      | retorno = PChamadaTeste()
       | retorno = PChamadaAssert()
    	)
     {
@@ -673,6 +674,17 @@ ChamadaProcedimento PChamadaProcedimento():
 	}
 }
 
+ChamadaProcedimento PChamadaTeste():
+{
+	Id nomeProcedimento;
+	ListaExpressao parametrosAtuais;
+}
+{
+	<TEST> nomeProcedimento = PId() <LPAREN> <RPAREN>
+	{
+		return new ChamadaProcedimento(nomeProcedimento, null);
+	}
+}
 
 Comando PChamadaAssert() :
 {
@@ -754,8 +766,11 @@ Declaracao PDeclaracao():
            retorno = PDeclaracaoComposta()
           |LOOKAHEAD(PDeclaracaoProcedimento() <COMMA>)
            retorno = PDeclaracaoComposta() 
+          |LOOKAHEAD(PDeclaracaoTeste() <COMMA>)
+           retorno = PDeclaracaoComposta() 
 		  | retorno = PDeclaracaoVariavel()
 		  | retorno = PDeclaracaoProcedimento()
+		  | retorno = PDeclaracaoTeste()
           | <LPAREN> retorno = PDeclaracao() <RPAREN>   		 
 		  
 	)
@@ -773,6 +788,10 @@ DeclaracaoComposta PDeclaracaoComposta():
 	 
 	 |  LOOKAHEAD(PDeclaracaoProcedimento() <COMMA>)
 	 d1 = PDeclaracaoProcedimento() <COMMA> d2 = PDeclaracao()
+
+	 |  LOOKAHEAD(PDeclaracaoTeste() <COMMA>)
+	 d1 = PDeclaracaoTeste() <COMMA> d2 = PDeclaracao()
+	 
 	)
 	
 	{return new DeclaracaoComposta(d1, d2);}
@@ -813,6 +832,37 @@ DefProcedimento PDefProcedimento():
 	}
 	
 }
+
+DeclaracaoProcedimento PDeclaracaoTeste():
+{
+	Id nome;
+	DefProcedimento defTeste;
+}
+{
+    (
+    	<TEST> nome = PId() <LPAREN> <RPAREN> defTeste = PDefTeste()
+    )
+	{
+	    return new DeclaracaoProcedimento (nome, defTeste);
+	}
+}
+
+DefProcedimento PDefTeste():
+{
+	Comando comando;
+}
+{
+    (
+		<LBRACE> comando = PComando() <RBRACE>
+    )
+	{
+	    return new DefProcedimento (new ListaDeclaracaoParametro(), comando);
+	}
+	
+}
+
+
+
 
 Tipo PTipo():
 {
