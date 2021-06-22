@@ -655,8 +655,6 @@ Comando PComandoSimples() :
       | <LPAREN> retorno = PComando() <RPAREN>
       | retorno = PChamadaProcedimento()
       | retorno = PChamadaAssert()
-      | retorno = PChamadaAssertTrue()
-      | retorno = PChamadaAssertFalse()
    	)
     {
         return retorno;
@@ -675,7 +673,23 @@ ChamadaProcedimento PChamadaProcedimento():
 	}
 }
 
-ChamadaAssert PChamadaAssert():
+
+Comando PChamadaAssert() :
+{
+	Comando retorno;
+}
+{
+    (
+    	retorno = PChamadaAssertEquals()
+      | retorno = PChamadaAssertTrue()
+      | retorno = PChamadaAssertFalse()
+   	)
+    {
+        return retorno;
+    }
+}
+
+ChamadaAssert PChamadaAssertEquals():
 {
 	Expressao esq;
 	Expressao dir;
