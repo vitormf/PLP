@@ -9,6 +9,7 @@ import li2.plp.imperative1.memory.AmbienteCompilacaoImperativa;
 import li2.plp.imperative1.memory.AmbienteExecucaoImperativa;
 import li2.plp.imperative1.memory.EntradaVaziaException;
 import li2.plp.imperative1.memory.ErroTipoEntradaException;
+import li2.plp.imperative2.memory.ContextoExecucaoImperativa2;
 
 public class ChamadaAssert implements Comando {
 	
@@ -33,11 +34,15 @@ public class ChamadaAssert implements Comando {
 			throws IdentificadorJaDeclaradoException, IdentificadorNaoDeclaradoException, EntradaVaziaException,
 			ErroTipoEntradaException {
 		
-		ValorConcreto esq = (ValorConcreto) this.esq.avaliar(ambiente);
-		ValorConcreto dir = (ValorConcreto) this.dir.avaliar(ambiente);
+		ContextoExecucaoImperativa2 contexto = (ContextoExecucaoImperativa2) ambiente;
 		
-		if (!esq.isEquals(dir)) {
-			throw new AssertFalhouException(ambiente, this);
+		if (contexto.getTestar()) {
+			ValorConcreto esq = (ValorConcreto) this.esq.avaliar(ambiente);
+			ValorConcreto dir = (ValorConcreto) this.dir.avaliar(ambiente);
+			
+			if (!esq.isEquals(dir)) {
+				throw new AssertFalhouException(ambiente, this);
+			}
 		}
 		
 		return ambiente;

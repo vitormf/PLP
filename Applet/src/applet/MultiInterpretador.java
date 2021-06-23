@@ -65,7 +65,7 @@ public class MultiInterpretador {
 	}
 
 	public void interpretarCodigo(String sourceCode, String listaEntrada,
-			int selectedIndex) {
+			int selectedIndex, boolean testar) {
 		try {
 			ByteArrayInputStream fis = new ByteArrayInputStream(sourceCode
 					.getBytes());
@@ -90,7 +90,7 @@ public class MultiInterpretador {
 				interpretarImp1(fis, listaEntrada);
 				break;
 			case IMP2:
-				interpretarImp2(fis, listaEntrada);
+				interpretarImp2(fis, listaEntrada, testar);
 				break;
 			case OO1:
 				interpretarOO1(fis, listaEntrada);
@@ -207,7 +207,7 @@ public class MultiInterpretador {
 		}
 	}
 
-	private void interpretarImp2(InputStream fis, String entradaStr)
+	private void interpretarImp2(InputStream fis, String entradaStr, boolean testar)
 			throws Exception {
 		li2.plp.imperative2.Programa prog;
 		if (imp2Parser == null) {
@@ -221,9 +221,11 @@ public class MultiInterpretador {
 		messageBoard.setText("sintaxe verificada com sucesso!\n");
 		li2.plp.imperative1.memory.ListaValor entrada = obterListaEntradaImp2(entradaStr);
 		if (prog.checaTipo(new li2.plp.imperative1.memory.ContextoCompilacaoImperativa(entrada))) {
+			
 			messageBoard.append("resultado = "
-					+ prog.executar(new li2.plp.imperative2.memory.ContextoExecucaoImperativa2(entrada))
+					+ prog.executar(new li2.plp.imperative2.memory.ContextoExecucaoImperativa2(entrada, testar))
 							.toString());
+			
 		} else {
 			messageBoard.append("erro de tipos!");
 		}

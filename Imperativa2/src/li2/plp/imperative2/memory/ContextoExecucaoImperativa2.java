@@ -16,13 +16,16 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 	 * armazena apenas procedimentos.
 	 */
 	private Contexto<DefProcedimento> contextoProcedimentos;
+	
+	private boolean testar;
 
 	/**
 	 * Construtor da classe.
 	 */
-	public ContextoExecucaoImperativa2(ListaValor entrada) {
+	public ContextoExecucaoImperativa2(ListaValor entrada, boolean testar) {
 		super(entrada);
 		contextoProcedimentos = new Contexto<DefProcedimento>();
+		this.testar = testar;
 	}
 
 	@Override
@@ -68,5 +71,9 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 			throw new ProcedimentoNaoDeclaradoException(idArg);
 		}
 
+	}
+	
+	public boolean getTestar() {
+		return testar;
 	}
 }

@@ -244,7 +244,7 @@ public class InterpretadorPLP extends JFrame {
 									.getText();
 							interpreter.interpretarCodigo(sourceCode,
 									listaEntrada, jComboBoxLinguagens
-											.getSelectedIndex());
+											.getSelectedIndex(), false);
 						}
 					});
 		}
@@ -264,7 +264,7 @@ public class InterpretadorPLP extends JFrame {
 									.getText();
 							interpreter.interpretarCodigo(sourceCode,
 									listaEntrada, jComboBoxLinguagens
-											.getSelectedIndex());
+											.getSelectedIndex(), true);
 						}
 					});
 		}
@@ -307,7 +307,7 @@ class InterpreterKeyListener implements KeyListener {
 			String sourceCode = this.frame.jTextAreaCodigo.getText();
 			String listaEntrada = this.frame.jTextFieldListaEntrada.getText();
 			this.frame.interpreter.interpretarCodigo(sourceCode, listaEntrada,
-					this.frame.jComboBoxLinguagens.getSelectedIndex());
+					this.frame.jComboBoxLinguagens.getSelectedIndex(), false);
 		}
 	}
 

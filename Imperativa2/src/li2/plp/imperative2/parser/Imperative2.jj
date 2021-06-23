@@ -64,7 +64,7 @@ public class Imp2Parser {
             System.out.println("Imperativa 2 PLP Parser Version 0.0.1:  Imperativa2 program parsed successfully.");
             
             if(programa.checaTipo(new ContextoCompilacaoImperativa(entrada))) {
-                ListaValor saida = programa.executar(new ContextoExecucaoImperativa2(entrada));
+                ListaValor saida = programa.executar(new ContextoExecucaoImperativa2(entrada, false));
                 System.out.println(saida);
             }
             else {
@@ -677,7 +677,6 @@ ChamadaProcedimento PChamadaProcedimento():
 ChamadaProcedimento PChamadaTeste():
 {
 	Id nomeProcedimento;
-	ListaExpressao parametrosAtuais;
 }
 {
 	<TEST> nomeProcedimento = PId() <LPAREN> <RPAREN>
@@ -836,18 +835,18 @@ DefProcedimento PDefProcedimento():
 DeclaracaoProcedimento PDeclaracaoTeste():
 {
 	Id nome;
-	DefProcedimento defTeste;
+	DefTeste defTeste;
 }
 {
     (
     	<TEST> nome = PId() <LPAREN> <RPAREN> defTeste = PDefTeste()
     )
 	{
-	    return new DeclaracaoProcedimento (nome, defTeste);
+	    return new DeclaracaoTeste (nome, defTeste);
 	}
 }
 
-DefProcedimento PDefTeste():
+DefTeste PDefTeste():
 {
 	Comando comando;
 }
@@ -856,7 +855,7 @@ DefProcedimento PDefTeste():
 		<LBRACE> comando = PComando() <RBRACE>
     )
 	{
-	    return new DefProcedimento (new ListaDeclaracaoParametro(), comando);
+	    return new DefTeste (comando);
 	}
 	
 }
