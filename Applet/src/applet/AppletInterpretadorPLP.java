@@ -233,7 +233,7 @@ public class AppletInterpretadorPLP extends Applet {
 			jTextFieldListaEntrada.setBounds(new java.awt.Rectangle(20, 218,
 					350, 20));
 			jTextFieldListaEntrada
-					.setToolTipText("informe os valores da lista de entrada separados por espa�os");
+					.setToolTipText("informe os valores da lista de entrada separados por espaços");
 		}
 		return jTextFieldListaEntrada;
 	}
