@@ -21,6 +21,8 @@ import li1.plp.imperative1.memory.ContextoCompilacaoImperativa;
 import li1.plp.imperative1.memory.ContextoExecucaoImperativa;
 //import li1.plp.imperative1.memory.ListaValor;
 import li1.plp.imperative1.parser.Imp1Parser;
+import li2.plp.imperative1.memory.ListaValor;
+import li2.plp.imperative2.TestRunner;
 import li2.plp.imperative2.memory.ContextoExecucaoImperativa2;
 import li2.plp.imperative2.parser.Imp2Parser;
 //import loo1.plp.orientadaObjetos1.expressao.valor.ValorConcreto;
@@ -222,9 +224,9 @@ public class MultiInterpretador {
 		li2.plp.imperative1.memory.ListaValor entrada = obterListaEntradaImp2(entradaStr);
 		if (prog.checaTipo(new li2.plp.imperative1.memory.ContextoCompilacaoImperativa(entrada))) {
 			
-			messageBoard.append("resultado = "
-					+ prog.executar(new li2.plp.imperative2.memory.ContextoExecucaoImperativa2(entrada, testar))
-							.toString());
+			TestRunner.clear();
+			ListaValor valor = prog.executar(new li2.plp.imperative2.memory.ContextoExecucaoImperativa2(entrada, testar));
+			messageBoard.append(testar ? TestRunner.report() : "resultado = " + valor.toString());
 			
 		} else {
 			messageBoard.append("erro de tipos!");

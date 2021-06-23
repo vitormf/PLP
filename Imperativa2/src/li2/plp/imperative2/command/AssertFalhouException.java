@@ -7,7 +7,7 @@ public class AssertFalhouException extends RuntimeException {
 
 	private static final long serialVersionUID = -4319934799920230514L;
 	
-	private static final String template = "Assertion error: expecting \"%s\" but was \"%s\"";
+	private static final String template = "Esperava \"%s\" mas era \"%s\"";
 	
 	public AssertFalhouException(AmbienteExecucaoImperativa ambiente, ChamadaAssert chamadaAssert) {
 		super(generateMessage(ambiente, chamadaAssert));

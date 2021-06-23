@@ -654,7 +654,6 @@ Comando PComandoSimples() :
       | retorno = PIO()
       | <LPAREN> retorno = PComando() <RPAREN>
       | retorno = PChamadaProcedimento()
-      | retorno = PChamadaTeste()
       | retorno = PChamadaAssert()
    	)
     {
@@ -671,17 +670,6 @@ ChamadaProcedimento PChamadaProcedimento():
 	<CALL> nomeProcedimento = PId() <LPAREN> parametrosAtuais = PListaExpressao() <RPAREN>
 	{
 		return new ChamadaProcedimento(nomeProcedimento, parametrosAtuais);
-	}
-}
-
-ChamadaProcedimento PChamadaTeste():
-{
-	Id nomeProcedimento;
-}
-{
-	<TEST> nomeProcedimento = PId() <LPAREN> <RPAREN>
-	{
-		return new ChamadaProcedimento(nomeProcedimento, null);
 	}
 }
 
