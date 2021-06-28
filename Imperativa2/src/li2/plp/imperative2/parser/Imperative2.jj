@@ -755,11 +755,17 @@ Declaracao PDeclaracao():
           |LOOKAHEAD(PDeclaracaoProcedimento() <COMMA>)
            retorno = PDeclaracaoComposta() 
           |LOOKAHEAD(PDeclaracaoTeste() <COMMA>)
-           retorno = PDeclaracaoComposta() 
+           retorno = PDeclaracaoComposta()
+          |LOOKAHEAD(PDeclaracaoTesteSetup() <COMMA>)
+           retorno = PDeclaracaoComposta()
+          |LOOKAHEAD(PDeclaracaoTesteTeardown() <COMMA>)
+           retorno = PDeclaracaoComposta()
 		  | retorno = PDeclaracaoVariavel()
 		  | retorno = PDeclaracaoProcedimento()
 		  | retorno = PDeclaracaoTeste()
-          | <LPAREN> retorno = PDeclaracao() <RPAREN>   		 
+		  | retorno = PDeclaracaoTesteSetup()
+		  | retorno = PDeclaracaoTesteTeardown()
+          | <LPAREN> retorno = PDeclaracao() <RPAREN>
 		  
 	)
 	{return retorno;}
@@ -780,6 +786,12 @@ DeclaracaoComposta PDeclaracaoComposta():
 	 |  LOOKAHEAD(PDeclaracaoTeste() <COMMA>)
 	 d1 = PDeclaracaoTeste() <COMMA> d2 = PDeclaracao()
 	 
+	 |  LOOKAHEAD(PDeclaracaoTesteSetup() <COMMA>)
+	 d1 = PDeclaracaoTesteSetup() <COMMA> d2 = PDeclaracao()
+
+	 |  LOOKAHEAD(PDeclaracaoTesteTeardown() <COMMA>)
+	 d1 = PDeclaracaoTesteTeardown() <COMMA> d2 = PDeclaracao()
+
 	)
 	
 	{return new DeclaracaoComposta(d1, d2);}
@@ -821,7 +833,7 @@ DefProcedimento PDefProcedimento():
 	
 }
 
-DeclaracaoProcedimento PDeclaracaoTeste():
+DeclaracaoTeste PDeclaracaoTeste():
 {
 	Id nome;
 	DefTeste defTeste;
@@ -835,6 +847,34 @@ DeclaracaoProcedimento PDeclaracaoTeste():
 	}
 }
 
+DeclaracaoTesteSetup PDeclaracaoTesteSetup():
+{
+	DefTesteSetup defTeste;
+}
+{
+    (
+    	<TEST_SETUP> <LPAREN> <RPAREN> defTeste = PDefTesteSetup()
+    )
+	{
+	    return new DeclaracaoTesteSetup (defTeste);
+	}
+}
+
+DeclaracaoTesteTeardown PDeclaracaoTesteTeardown():
+{
+	DefTesteTeardown defTeste;
+}
+{
+    (
+    	<TEST_TEARDOWN> <LPAREN> <RPAREN> defTeste = PDefTesteTeardown()
+    )
+	{
+	    return new DeclaracaoTesteTeardown (defTeste);
+	}
+}
+
+
+
 DefTeste PDefTeste():
 {
 	Comando comando;
@@ -847,6 +887,34 @@ DefTeste PDefTeste():
 	    return new DefTeste (comando);
 	}
 	
+}
+
+DefTesteSetup PDefTesteSetup():
+{
+	Comando comando;
+}
+{
+    (
+		<LBRACE> comando = PComando() <RBRACE>
+    )
+	{
+	    return new DefTesteSetup (comando);
+	}
+
+}
+
+DefTesteTeardown PDefTesteTeardown():
+{
+	Comando comando;
+}
+{
+    (
+		<LBRACE> comando = PComando() <RBRACE>
+    )
+	{
+	    return new DefTesteTeardown (comando);
+	}
+
 }
 
 

@@ -11,6 +11,8 @@ import li2.plp.imperative2.TestRunner;
 import li2.plp.imperative2.command.ChamadaTeste;
 import li2.plp.imperative2.declaration.DefProcedimento;
 import li2.plp.imperative2.declaration.DefTeste;
+import li2.plp.imperative2.declaration.DefTesteSetup;
+import li2.plp.imperative2.declaration.DefTesteTeardown;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +46,9 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 
 	@Override
 	public void restaura() {
-		executaTestes();
+		if (testar) {
+			executaTestes();
+		}
 		super.restaura();
 		this.contextoProcedimentos.restaura();
 	}
@@ -53,23 +57,37 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 		HashMap<Id, DefProcedimento> procedimentos = contextoProcedimentos.observa();
 
 		List<Id> testes = new ArrayList<>();
+		Id setup = null;
+		Id teardown = null;
 
 		for (Id id : procedimentos.keySet()) {
 			DefProcedimento proc = procedimentos.get(id);
-			if (proc instanceof DefTeste) {
+			if (proc instanceof DefTesteSetup) {
+				setup = id;
+			} else if (proc instanceof DefTesteTeardown) {
+				teardown = id;
+			} else if (proc instanceof DefTeste) {
 				testes.add(id);
 			}
 		}
 
 		for (Id id : testes) {
 			try {
-				// TODO: Run Setup
+				if (setup != null) {
+					new ChamadaTeste(setup).executar(this);
+				}
 				new ChamadaTeste(id).executar(this);
 				TestRunner.addSuccess(id);
 			} catch (Exception exc) {
 				TestRunner.addFailure(id, exc);
 			} finally {
-				// TODO: Run TearDown
+				if (teardown != null) {
+					try {
+						new ChamadaTeste(teardown).executar(this);
+					} catch (Exception exc) {
+						TestRunner.addFailure(id, exc);
+					}
+				}
 			}
 		}
 

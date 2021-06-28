@@ -11,3 +11,4 @@
 /bin/
 **/parser/*.java
 .idea
+*.iml

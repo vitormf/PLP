@@ -1,9 +1,30 @@
-{ 
-   var a  =  1 ,
-   proc incA (int z)  {
-     a := a + z
-   };
-   call incA(3);
-   call incA(5);
-   write(a)
+{
+	var x = 0,
+	test_setup() {
+	    assert(0, x); // falha se o teardown não estiver funcionando
+	    x := 2
+	},
+    test_teardown() {
+        x := 0
+    },
+	test valorX3() {
+		assert(2, x); // falha se setup não estiver funcionando
+		x := 3;
+		assert(3, x)
+	},
+	test valorX4() {
+		x := 4;
+		assert_true(4 == x)
+	},
+	test valorX5() {
+		x := 5;
+		assert_false(4 == x)
+	},
+	test valorX6FalhaProposital() {
+		x := 7;
+		assert(6,x) // falha proposital
+	};
+
+
+	write("completed")
 }
