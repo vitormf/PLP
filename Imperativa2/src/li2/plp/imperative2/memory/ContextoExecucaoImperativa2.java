@@ -4,9 +4,15 @@ import li2.plp.expressions2.expression.Id;
 import li2.plp.expressions2.memory.Contexto;
 import li2.plp.expressions2.memory.VariavelJaDeclaradaException;
 import li2.plp.expressions2.memory.VariavelNaoDeclaradaException;
+import li2.plp.imperative1.memory.AmbienteExecucaoImperativa;
 import li2.plp.imperative1.memory.ContextoExecucaoImperativa;
 import li2.plp.imperative1.memory.ListaValor;
+import li2.plp.imperative2.TestRunner;
+import li2.plp.imperative2.command.ChamadaTeste;
 import li2.plp.imperative2.declaration.DefProcedimento;
+import li2.plp.imperative2.declaration.DefTeste;
+
+import java.util.HashMap;
 
 public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 		implements AmbienteExecucaoImperativa2 {
@@ -36,8 +42,25 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 
 	@Override
 	public void restaura() {
+		executaTestes();
 		super.restaura();
 		this.contextoProcedimentos.restaura();
+	}
+
+	private void executaTestes() {
+		HashMap<Id, DefProcedimento> procedimentos = contextoProcedimentos.observa();
+
+		for (Id id : procedimentos.keySet()) {
+			DefProcedimento proc = procedimentos.get(id);
+			if (proc instanceof DefTeste) {
+				try {
+					new ChamadaTeste(id).executar(this);
+					TestRunner.addSuccess(id);
+				} catch (Exception exc) {
+					TestRunner.addFailure(id, exc);
+				}
+			}
+		}
 	}
 
 	/**

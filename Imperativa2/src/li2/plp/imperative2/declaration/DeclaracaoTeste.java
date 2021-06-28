@@ -16,20 +16,4 @@ public class DeclaracaoTeste extends DeclaracaoProcedimento {
 		super(id, defTeste);
 	}
 	
-	@Override
-	public AmbienteExecucaoImperativa elabora(AmbienteExecucaoImperativa ambiente)
-			throws IdentificadorJaDeclaradoException, IdentificadorNaoDeclaradoException, EntradaVaziaException {
-		
-		AmbienteExecucaoImperativa amb =  super.elabora(ambiente);
-		
-		try {
-			new ChamadaTeste(getId()).executar(ambiente);
-			TestRunner.addSuccess(getId());
-		} catch (Exception exc) {
-			TestRunner.addFailure(getId(), exc);
-		}
-		
-		return amb;
-	}
-	
 }
