@@ -12,7 +12,9 @@ import li2.plp.imperative2.command.ChamadaTeste;
 import li2.plp.imperative2.declaration.DefProcedimento;
 import li2.plp.imperative2.declaration.DefTeste;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 		implements AmbienteExecucaoImperativa2 {
@@ -50,17 +52,28 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 	private void executaTestes() {
 		HashMap<Id, DefProcedimento> procedimentos = contextoProcedimentos.observa();
 
+		List<Id> testes = new ArrayList<>();
+
 		for (Id id : procedimentos.keySet()) {
 			DefProcedimento proc = procedimentos.get(id);
 			if (proc instanceof DefTeste) {
-				try {
-					new ChamadaTeste(id).executar(this);
-					TestRunner.addSuccess(id);
-				} catch (Exception exc) {
-					TestRunner.addFailure(id, exc);
-				}
+				testes.add(id);
 			}
 		}
+
+		for (Id id : testes) {
+			try {
+				// TODO: Run Setup
+				new ChamadaTeste(id).executar(this);
+				TestRunner.addSuccess(id);
+			} catch (Exception exc) {
+				TestRunner.addFailure(id, exc);
+			} finally {
+				// TODO: Run TearDown
+			}
+		}
+
+
 	}
 
 	/**
