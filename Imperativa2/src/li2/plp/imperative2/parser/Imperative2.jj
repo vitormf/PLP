@@ -64,8 +64,9 @@ public class Imp2Parser {
             System.out.println("Imperativa 2 PLP Parser Version 0.0.1:  Imperativa2 program parsed successfully.");
             
             if(programa.checaTipo(new ContextoCompilacaoImperativa(entrada))) {
-                ListaValor saida = programa.executar(new ContextoExecucaoImperativa2(entrada, false));
-                System.out.println(saida);
+				boolean testar = args.length >= 2 && args[1].equalsIgnoreCase("test");
+				ListaValor saida = programa.executar(new ContextoExecucaoImperativa2(entrada, testar));
+                System.out.println(testar ? TestRunner.report() : saida);
             }
             else {
                 System.out.println("Erro de tipo");
