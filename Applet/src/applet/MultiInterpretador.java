@@ -26,6 +26,7 @@ import li2.plp.imperative2.TestRunner;
 import li2.plp.imperative2.memory.ContextoExecucaoImperativa2;
 import li2.plp.imperative2.parser.Imp2Parser;
 //import loo1.plp.orientadaObjetos1.expressao.valor.ValorConcreto;
+import loo1.plp.orientadaObjetos1.memoria.ContextoExecucaoOO1;
 import loo1.plp.orientadaObjetos1.parser.OO1Parser;
 import loo2.plp.orientadaObjetos2.parser.OO2Parser;
 
@@ -95,7 +96,7 @@ public class MultiInterpretador {
 				interpretarImp2(fis, listaEntrada, testar);
 				break;
 			case OO1:
-				interpretarOO1(fis, listaEntrada);
+				interpretarOO1(fis, listaEntrada, testar);
 				break;
 			case OO2:
 				interpretarOO2(fis, listaEntrada);
@@ -233,7 +234,7 @@ public class MultiInterpretador {
 		}
 	}
 
-	private void interpretarOO1(InputStream fis, String entradaStr)
+	private void interpretarOO1(InputStream fis, String entradaStr, boolean testar)
 			throws Exception {
 		loo1.plp.orientadaObjetos1.Programa prog;
 		if (oo1Parser == null) {
@@ -245,15 +246,10 @@ public class MultiInterpretador {
 
 		messageBoard.setText("sintaxe verificada com sucesso!\n");
 		loo1.plp.orientadaObjetos1.memoria.colecao.ListaValor entrada = obterListaEntradaOO1(entradaStr);
-		if (prog
-				.checaTipo(new loo1.plp.orientadaObjetos1.memoria.ContextoCompilacaoOO1(
-						entrada))) {
-			messageBoard
-					.append("resultado = "
-							+ prog
-									.executar(
-											new loo1.plp.orientadaObjetos1.memoria.ContextoExecucaoOO1(
-													entrada)).toString());
+		if (prog.checaTipo(new loo1.plp.orientadaObjetos1.memoria.ContextoCompilacaoOO1(entrada))) {
+			ContextoExecucaoOO1 ctxExec = new ContextoExecucaoOO1(entrada);
+			String resultadoExec = "resultado = "+ prog.executar(ctxExec).toString();
+			messageBoard.append(testar ? TestRunner.report() : resultadoExec);
 		} else {
 			messageBoard.append("erro de tipos!");
 		}

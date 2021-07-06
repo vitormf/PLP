@@ -57,10 +57,14 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 */
     private ValorRef proxRef;
 
+    private boolean testar;
+
     /**
 	 * Construtor utilizado quando queremos ler do teclado.
 	 */
-    public ContextoExecucaoOO1(){
+    public ContextoExecucaoOO1(boolean testar){
+        this.testar = testar;
+
         pilha = new Stack<HashMap<Id, Valor>>();
 
         mapObjetos = new HashMap<ValorRef, Objeto>();              	
