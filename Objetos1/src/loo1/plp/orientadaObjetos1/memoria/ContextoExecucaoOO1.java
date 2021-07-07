@@ -181,7 +181,7 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 * Este m�todo l� uma entrada que pode ser de uma tail ou do teclado
 	 * 
 	 * @return Obt�m uma entrada que pode ser de uma tail ou do teclado
-	 * @exception Lan�a
+	 * @exception EntradaInvalidaException
 	 *                uma exce��o se a tail com os valores nao tiver mais
 	 *                elementos.
 	 */
@@ -516,6 +516,11 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
         } else {
             return result;
         }
-    }    
+    }
+
+    @Override
+    public boolean getTestar() {
+        return testar;
+    }
 
 }

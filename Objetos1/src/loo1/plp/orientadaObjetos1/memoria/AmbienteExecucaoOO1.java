@@ -118,4 +118,6 @@ public interface AmbienteExecucaoOO1 extends AmbienteOO1<Valor> {
      * declarada.
      */
     public Valor getValor(Id idArg) throws VariavelNaoDeclaradaException;
+
+    public boolean getTestar();
 }

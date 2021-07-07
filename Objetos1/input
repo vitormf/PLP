@@ -1,7 +1,12 @@
   {
       classe Contador {
           int valor = 10;
+          proc alteraValor() {
+            this.valor := 9
+          },
           proc print() {
+            this.alteraValor();
+            assert(this.valor, 9);
             write(this.valor)
           }
       }     
