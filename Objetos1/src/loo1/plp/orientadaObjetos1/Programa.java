@@ -4,6 +4,7 @@ import loo1.plp.expressions2.memory.VariavelJaDeclaradaException;
 import loo1.plp.expressions2.memory.VariavelNaoDeclaradaException;
 import loo1.plp.orientadaObjetos1.comando.Comando;
 import loo1.plp.orientadaObjetos1.declaracao.classe.DecClasse;
+import loo1.plp.orientadaObjetos1.declaracao.classe.DecTesteSuite;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseNaoDeclaradaException;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ObjetoJaDeclaradoException;
@@ -28,14 +29,17 @@ public class Programa {
      */
     private Comando comando;
 
+    private DecTesteSuite decTesteSuite;
+
     /**
      * Construtor.
      * @param decClasse A declara�ao de classe(s)
      * @param comando O comando executado ap�s a declara�ao.
      */
-    public Programa(DecClasse decClasse, Comando comando){
+    public Programa(DecClasse decClasse, Comando comando, DecTesteSuite decTesteSuite){
         this.decClasse = decClasse;
         this.comando = comando;
+        this.decTesteSuite = decTesteSuite;
     }
 
      /**

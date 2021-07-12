@@ -128,7 +128,7 @@ public class Teste2OO1 {
 
     Comando main = new ComDeclaracao(vars, comandosMain);
 
-    Programa prg = new Programa(classeContador, main);
+    Programa prg = new Programa(classeContador, main, null);
 
   try{
     if(prg.checaTipo(new ContextoCompilacaoOO1(new ListaValor()))) {

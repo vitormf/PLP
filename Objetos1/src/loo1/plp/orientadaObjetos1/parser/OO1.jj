@@ -177,9 +177,9 @@ TOKEN : /* TOKENS DE OO1 */
 TOKEN : /* TESTES */
 {
  	< TEST: "test" >
-| 	< TEST_SETUP: "test_setup" >
-| 	< TEST_TEARDOWN: "test_teardown" >
-| 	< TEST_SUITE: "test_suite" >
+| 	< TEST_SETUP: "setup" >
+| 	< TEST_TEARDOWN: "teardown" >
+| 	< TEST_SUITE: "suite" >
 | 	< ASSERT: "assert" >
 | 	< ASSERT_TRUE: "assert_true" >
 | 	< ASSERT_FALSE: "assert_false" >
@@ -295,12 +295,13 @@ Programa processaEntrada() :
 Programa PPrograma() :
 {
   DecClasse decClasse = null;
+  DecTesteSuite decTesteSuite = null;
   Comando comando = null;
 }
 {
-  < LBRACE > decClasse = PDecClasse() < SEMICOLON > comando = PComando() < RBRACE >
+  < LBRACE > decClasse = PDecClasse() < SEMICOLON > decTesteSuite = PDecTesteSuite() < SEMICOLON > comando = PComando() < RBRACE >
   {
-    return new Programa(decClasse, comando);
+    return new Programa(decClasse, comando, decTesteSuite);
   }
 }
 
@@ -1070,6 +1071,21 @@ DecClasse PDecClasse() :
   }
 }
 
+DecTesteSuite PDecTesteSuite() :
+{
+  DecTesteSuite retorno;
+}
+{
+  (
+    LOOKAHEAD(PDecTesteSuiteAtomica() < COMMA >)
+    retorno = PDecTesteSuiteComposta()
+  | retorno = PDecTesteSuiteAtomica()
+  )
+  {
+    return retorno;
+  }
+}
+
 /**
  * ... "classe" Id "{" DecVariavel ";" DecProcedimento "}"
  **/
@@ -1086,6 +1102,19 @@ DecClasse PDecClasseAtomica() :
   }
 }
 
+DecTesteSuite PDecTesteSuiteAtomica() :
+{
+  Id nomeTesteSuite;
+  DecVariavel atributos;
+  DecTeste testes;
+}
+{
+  < TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > testes = PDecTeste() < RBRACE >
+  {
+    return new DecTesteSuiteSimples(nomeTesteSuite, atributos, testes);
+  }
+}
+
 /**
  * ... DecClasse "," DecClasse
  **/
@@ -1098,6 +1127,18 @@ DecClasseComposta PDecClasseComposta() :
   d1 = PDecClasseAtomica() < COMMA > d2 = PDecClasse()
   {
     return new DecClasseComposta(d1, d2);
+  }
+}
+
+DecTesteSuiteComposta PDecTesteSuiteComposta() :
+{
+  DecTesteSuite d1;
+  DecTesteSuite d2;
+}
+{
+  d1 = PDecTesteSuiteAtomica() < COMMA > d2 = PDecTesteSuite()
+  {
+    return new DecTesteSuiteComposta(d1, d2);
   }
 }
 
@@ -1221,7 +1262,7 @@ DecTeste PDecTeste() :
 }
 {
   (
-    LOOKAHEAD(PDecProcedimentoSimples() < COMMA >)
+    LOOKAHEAD(PDecTesteSimples() < COMMA >)
     retorno = PDecTesteComposta()
   | retorno = PDecTesteSimples()
   )
@@ -1287,10 +1328,7 @@ DecTeste PDecTesteSimples() :
   Comando comando;
 }
 {
-  (
-    LOOKAHEAD(< TEST > PId() < LPAREN > < RPAREN >)
-    < TEST > nome = PId() < LPAREN > < RPAREN > < LBRACE > comando = PComando() < RBRACE >
-  )
+  < TEST > nome = PId() < LPAREN > < RPAREN > < LBRACE > comando = PComando() < RBRACE >
   {
     return new DecTesteSimples(nome, comando);
   }
