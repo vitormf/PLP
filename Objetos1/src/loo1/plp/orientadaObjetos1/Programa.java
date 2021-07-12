@@ -17,6 +17,7 @@ import loo1.plp.orientadaObjetos1.memoria.AmbienteCompilacaoOO1;
 import loo1.plp.orientadaObjetos1.memoria.AmbienteExecucaoOO1;
 import loo1.plp.orientadaObjetos1.memoria.DefTesteSuite;
 import loo1.plp.orientadaObjetos1.memoria.colecao.ListaValor;
+import loo1.plp.orientadaObjetos1.unitTests.TestRunner;
 import loo1.plp.orientadaObjetos1.unitTests.TesteSuiteExecutor;
 
 import java.util.Collection;
@@ -84,6 +85,7 @@ public class Programa {
                 TesteSuiteExecutor executor = new TesteSuiteExecutor(suite);
                 executor.executar(ambiente);
             }
+            System.out.println(TestRunner.report());
         }
         //ambiente.restaura();
         return ambiente.getSaida();

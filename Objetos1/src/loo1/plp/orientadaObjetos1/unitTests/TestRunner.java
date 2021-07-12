@@ -8,11 +8,11 @@ import java.util.List;
 public class TestRunner {
 
     private static class TestRun {
-        Id testId;
+        String testId;
         boolean success;
         Exception exception;
 
-        TestRun(Id testId, boolean success, Exception exception) {
+        TestRun(String testId, boolean success, Exception exception) {
             this.testId = testId;
             this.success = success;
             this.exception = exception;
@@ -23,11 +23,11 @@ public class TestRunner {
 
     private List<TestRun> testRuns = new ArrayList<>();
 
-    public static void addSuccess(Id testId) {
+    public static void addSuccess(String testId) {
         instance.testRuns.add(new TestRun(testId, true, null));
     }
 
-    public static void addFailure(Id testId, Exception exception) {
+    public static void addFailure(String testId, Exception exception) {
         instance.testRuns.add(new TestRun(testId, false, exception));
     }
 
@@ -36,7 +36,7 @@ public class TestRunner {
         StringBuilder builder = new StringBuilder();
 
         for (TestRun testRun : instance.testRuns) {
-            String name = testRun.testId.toString();
+            String name = testRun.testId;
             if (testRun.success) {
                 builder.append(String.format("\n%s: sucesso", name));
             } else {

@@ -43,14 +43,13 @@ public class TesteSuiteExecutor {
 
 
         for (Teste teste: testes) {
+            String testId = id.toString() + "." + "TODO";
             try {
+
                 new ChamadaTeste(teste).executar(ctx);
-            } catch (ProcedimentoNaoDeclaradoException e) {
-                e.printStackTrace();
-            } catch (ProcedimentoJaDeclaradoException e) {
-                e.printStackTrace();
-            } catch (EntradaInvalidaException e) {
-                e.printStackTrace();
+                TestRunner.addSuccess(testId);
+            } catch (Exception e) {
+               TestRunner.addFailure(testId, e);
             }
         }
     }

@@ -22,7 +22,6 @@ import li1.plp.imperative1.memory.ContextoExecucaoImperativa;
 //import li1.plp.imperative1.memory.ListaValor;
 import li1.plp.imperative1.parser.Imp1Parser;
 import li2.plp.imperative1.memory.ListaValor;
-import li2.plp.imperative2.TestRunner;
 import li2.plp.imperative2.memory.ContextoExecucaoImperativa2;
 import li2.plp.imperative2.parser.Imp2Parser;
 //import loo1.plp.orientadaObjetos1.expressao.valor.ValorConcreto;
@@ -225,9 +224,10 @@ public class MultiInterpretador {
 		li2.plp.imperative1.memory.ListaValor entrada = obterListaEntradaImp2(entradaStr);
 		if (prog.checaTipo(new li2.plp.imperative1.memory.ContextoCompilacaoImperativa(entrada))) {
 			
-			TestRunner.clear();
+			li2.plp.imperative2.TestRunner.clear();
 			ListaValor valor = prog.executar(new li2.plp.imperative2.memory.ContextoExecucaoImperativa2(entrada, testar));
-			messageBoard.append(testar ? TestRunner.report() : "resultado = " + valor.toString());
+			String report = li2.plp.imperative2.TestRunner.report();
+			messageBoard.append(testar ? report : "resultado = " + valor.toString());
 			
 		} else {
 			messageBoard.append("erro de tipos!");
@@ -242,14 +242,16 @@ public class MultiInterpretador {
 		} else {
 			oo1Parser.ReInit(fis);
 		}
-		prog = oo1Parser.processaEntrada();
+		prog = oo1Parser.processaEntrada(testar);
 
 		messageBoard.setText("sintaxe verificada com sucesso!\n");
 		loo1.plp.orientadaObjetos1.memoria.colecao.ListaValor entrada = obterListaEntradaOO1(entradaStr);
 		if (prog.checaTipo(new loo1.plp.orientadaObjetos1.memoria.ContextoCompilacaoOO1(entrada))) {
-			ContextoExecucaoOO1 ctxExec = new ContextoExecucaoOO1(entrada);
+			loo1.plp.orientadaObjetos1.unitTests.TestRunner.clear();
+			ContextoExecucaoOO1 ctxExec = new ContextoExecucaoOO1(entrada, testar);
 			String resultadoExec = "resultado = "+ prog.executar(ctxExec).toString();
-			messageBoard.append(testar ? TestRunner.report() : resultadoExec);
+			String testReport = loo1.plp.orientadaObjetos1.unitTests.TestRunner.report();
+			messageBoard.append(testar ? testReport : resultadoExec);
 		} else {
 			messageBoard.append("erro de tipos!");
 		}
