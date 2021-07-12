@@ -4,7 +4,7 @@ import loo1.plp.orientadaObjetos1.declaracao.procedimento.ListaDeclaracaoParamet
 
 public class Teste extends Procedimento {
 
-    Teste(Comando comando) {
+    public Teste(Comando comando) {
         super(new ListaDeclaracaoParametro(), comando);
     }
 }

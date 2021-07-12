@@ -128,11 +128,11 @@ public class Teste2LOO1 {
 
     Comando main = new ComDeclaracao(vars, comandosMain);
 
-    Programa prg = new Programa(classeContador, main, null);
+    Programa prg = new Programa(classeContador, main, null, false);
 
   try{
     if(prg.checaTipo(new ContextoCompilacaoOO1(new ListaValor()))) {
-       System.out.println(prg.executar(new ContextoExecucaoOO1(new ListaValor())));
+       System.out.println(prg.executar(new ContextoExecucaoOO1(new ListaValor(), false)));
        System.out.println("TERMINOU");
 
      }

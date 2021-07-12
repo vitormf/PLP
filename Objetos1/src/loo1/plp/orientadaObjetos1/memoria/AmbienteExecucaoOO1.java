@@ -30,6 +30,8 @@ public interface AmbienteExecucaoOO1 extends AmbienteOO1<Valor> {
      */
     public HashMap<Id, DefClasse> getMapDefClasse();
 
+    public HashMap<Id, DefTesteSuite> getMapDefTesteSuite();
+
     /**
      * Obt�m o mapeamento com os objetos e seus valores.
      * @return o mapeamento com os objetos e seus valores.

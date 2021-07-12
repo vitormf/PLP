@@ -1,4 +1,4 @@
-package loo1.plp.orientadaObjetos1;
+package loo1.plp.orientadaObjetos1.unitTests;
 
 import loo1.plp.expressions2.expression.Id;
 

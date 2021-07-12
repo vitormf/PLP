@@ -111,11 +111,11 @@ public class Teste3OO1 {
 
     Comando main = new ComDeclaracao(declaracaoVarContador, comandosMain);
 
-    Programa prg = new Programa(classeContador, main, null);
+    Programa prg = new Programa(classeContador, main, null, false);
 
   try{
     if(prg.checaTipo(new ContextoCompilacaoOO1(new ListaValor()))) {
-       System.out.println(prg.executar(new ContextoExecucaoOO1(new ListaValor())));
+       System.out.println(prg.executar(new ContextoExecucaoOO1(new ListaValor(), false)));
      }
      else {
       System.out.println("Erro de tipo!");

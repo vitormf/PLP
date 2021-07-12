@@ -15,7 +15,13 @@ import loo1.plp.orientadaObjetos1.excecao.execucao.EntradaInvalidaException;
 import loo1.plp.orientadaObjetos1.excecao.execucao.EntradaNaoFornecidaException;
 import loo1.plp.orientadaObjetos1.memoria.AmbienteCompilacaoOO1;
 import loo1.plp.orientadaObjetos1.memoria.AmbienteExecucaoOO1;
+import loo1.plp.orientadaObjetos1.memoria.DefTesteSuite;
 import loo1.plp.orientadaObjetos1.memoria.colecao.ListaValor;
+import loo1.plp.orientadaObjetos1.unitTests.TesteSuiteExecutor;
+
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Classe que representa um programa na linguagem OO.
  */
@@ -31,15 +37,18 @@ public class Programa {
 
     private DecTesteSuite decTesteSuite;
 
+    private boolean testar;
+
     /**
      * Construtor.
      * @param decClasse A declara�ao de classe(s)
      * @param comando O comando executado ap�s a declara�ao.
      */
-    public Programa(DecClasse decClasse, Comando comando, DecTesteSuite decTesteSuite){
+    public Programa(DecClasse decClasse, Comando comando, DecTesteSuite decTesteSuite, boolean testar){
         this.decClasse = decClasse;
         this.comando = comando;
         this.decTesteSuite = decTesteSuite;
+        this.testar = testar;
     }
 
      /**
@@ -67,6 +76,15 @@ public class Programa {
         //de declarar vari�veis antes de uma declara��o de classes
         //ambiente.incrementa();
         ambiente = comando.executar(decClasse.elabora(ambiente));
+
+        if (testar) {
+            ambiente = decTesteSuite.elabora(ambiente);
+            Collection<DefTesteSuite> defTesteSuites = ambiente.getDefTesteSuites();
+            for (DefTesteSuite suite : defTesteSuites) {
+                TesteSuiteExecutor executor = new TesteSuiteExecutor(suite);
+                executor.executar(ambiente);
+            }
+        }
         //ambiente.restaura();
         return ambiente.getSaida();
     }

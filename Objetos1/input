@@ -1,21 +1,20 @@
 {
     classe Contador {
-      int valor = 10;
-      proc alteraValor() {
-        this.valor := 9
-      },
-      proc print() {
-        this.alteraValor();
-        write(this.valor)
-      }
+        int valor = 10;
+        proc alteraValor() {
+            this.valor := 9
+        },
+        proc print() {
+            write(this.valor)
+        }
     };
 
     suite MeuTeste {
-      int valor = 10;
-      test alteraValor() {
-        assert(this.valor,10);
-        this.valor := 9
-      }
+        int valor = 10;
+        test verificaValor() {
+            assert(this.valor,10);
+            this.valor := 9
+        }
     };
 
     {

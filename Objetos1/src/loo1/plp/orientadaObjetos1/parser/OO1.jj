@@ -70,7 +70,7 @@ public class OO1Parser
     }
     try
     {
-      Programa programa = parser.processaEntrada();
+      Programa programa = parser.processaEntrada(testar);
       System.out.println("OO1 PLP Parser Version 0.0.1:  OO1 program parsed successfully.");
       if (programa.checaTipo(new ContextoCompilacaoOO1(new ListaValor())))
       {
@@ -274,12 +274,12 @@ TOKEN : /* OPERATORS */
  * método chamado com o intuito de processar a entrada fornecida ao parser gerando
  * objeto do tipo Programa.
  **/
-Programa processaEntrada() :
+Programa processaEntrada(boolean testar) :
 {
   Programa retorno;
 }
 {
-  retorno = PPrograma() < EOF >
+  retorno = PPrograma(testar) < EOF >
   {
     return retorno;
   }
@@ -292,7 +292,7 @@ Programa processaEntrada() :
 /**
  * Programa ::= "{" DecClasse ";" Comando "}"
  **/
-Programa PPrograma() :
+Programa PPrograma(boolean testar) :
 {
   DecClasse decClasse = null;
   DecTesteSuite decTesteSuite = null;
@@ -301,7 +301,7 @@ Programa PPrograma() :
 {
   < LBRACE > decClasse = PDecClasse() < SEMICOLON > decTesteSuite = PDecTesteSuite() < SEMICOLON > comando = PComando() < RBRACE >
   {
-    return new Programa(decClasse, comando, decTesteSuite);
+    return new Programa(decClasse, comando, decTesteSuite, testar);
   }
 }
 
