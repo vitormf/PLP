@@ -84,6 +84,7 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
        this.mapDefClasse = ambiente.getMapDefClasse();
        this.entrada = ambiente.getEntrada();
        this.saida = ambiente.getSaida();
+       this.testar = ambiente.getTestar();
        pilha = new Stack<HashMap<Id, Valor>>();
 	   HashMap<Id, Valor> aux = new HashMap<Id, Valor>();
        aux.put(new Id("this"), new ValorNull());
@@ -267,9 +268,16 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 * Restaura o estado do ambiente.
 	 */
     public void restaura(){
+        if (testar) {
+            executaTestes();
+        }
         pilha.pop();
         // pilhaDefClasse.pop(); // n�o restaura
         // pilhaObjeto.pop(); // n�o restaura
+    }
+
+    private void executaTestes() {
+        // TODO
     }
 
     /**

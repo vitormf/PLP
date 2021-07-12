@@ -179,6 +179,7 @@ TOKEN : /* TESTES */
  	< TEST: "test" >
 | 	< TEST_SETUP: "test_setup" >
 | 	< TEST_TEARDOWN: "test_teardown" >
+| 	< TEST_SUITE: "test_suite" >
 | 	< ASSERT: "assert" >
 | 	< ASSERT_TRUE: "assert_true" >
 | 	< ASSERT_FALSE: "assert_false" >
@@ -1214,6 +1215,21 @@ DecProcedimento PDecProcedimento() :
   }
 }
 
+DecTeste PDecTeste() :
+{
+  DecTeste retorno;
+}
+{
+  (
+    LOOKAHEAD(PDecProcedimentoSimples() < COMMA >)
+    retorno = PDecTesteComposta()
+  | retorno = PDecTesteSimples()
+  )
+  {
+    return retorno;
+  }
+}
+
 /**
  * ... DecProcedimento "," DecProcedimento
  **/
@@ -1226,6 +1242,18 @@ DecProcedimentoComposta PDecProcedimentoComposta() :
   d1 = PDecProcedimentoSimples() < COMMA > d2 = PDecProcedimento()
   {
     return new DecProcedimentoComposta(d1, d2);
+  }
+}
+
+DecTesteComposta PDecTesteComposta() :
+{
+  DecTeste d1;
+  DecTeste d2;
+}
+{
+  d1 = PDecTesteSimples() < COMMA > d2 = PDecTeste()
+  {
+    return new DecTesteComposta(d1, d2);
   }
 }
 
@@ -1250,6 +1278,21 @@ DecProcedimento PDecProcedimentoSimples() :
       listaPar = new ListaDeclaracaoParametro();
     }
     return new DecProcedimentoSimples(nome, listaPar, comando);
+  }
+}
+
+DecTeste PDecTesteSimples() :
+{
+  Id nome;
+  Comando comando;
+}
+{
+  (
+    LOOKAHEAD(< TEST > PId() < LPAREN > < RPAREN >)
+    < TEST > nome = PId() < LPAREN > < RPAREN > < LBRACE > comando = PComando() < RBRACE >
+  )
+  {
+    return new DecTesteSimples(nome, comando);
   }
 }
 

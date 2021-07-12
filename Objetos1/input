@@ -6,7 +6,7 @@
           },
           proc print() {
             this.alteraValor();
-            assert(this.valor,9);
+            //assert(this.valor,10);
             write(this.valor)
           }
       }     
