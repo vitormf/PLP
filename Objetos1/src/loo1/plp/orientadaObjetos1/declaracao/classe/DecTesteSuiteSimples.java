@@ -35,7 +35,7 @@ public class DecTesteSuiteSimples extends DecClasseSimples implements DecTesteSu
             ClasseJaDeclaradaException, ClasseNaoDeclaradaException,
             ProcedimentoNaoDeclaradoException, ProcedimentoJaDeclaradoException {
 
-        ambiente.mapDefTesteSuite(nomeClasse, new DefTesteSuite(nomeClasse, atributos, testes));
+        ambiente.mapDefTesteSuite(nomeClasse, new DefTesteSuite(nomeClasse, atributos, testes, setup, teardown));
         boolean resposta = false;
         ambiente.incrementa();
         if (atributos.checaTipo(ambiente)){
@@ -51,7 +51,7 @@ public class DecTesteSuiteSimples extends DecClasseSimples implements DecTesteSu
             ClasseJaDeclaradaException, ClasseNaoDeclaradaException,
             ProcedimentoNaoDeclaradoException, ProcedimentoJaDeclaradoException {
 
-        ambiente.mapDefTesteSuite(nomeClasse, new DefTesteSuite(nomeClasse, atributos,testes));
+        ambiente.mapDefTesteSuite(nomeClasse, new DefTesteSuite(nomeClasse, atributos,testes, setup, teardown));
 
         return ambiente;
     }

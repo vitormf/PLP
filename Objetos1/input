@@ -1,37 +1,54 @@
 {
-    classe Contador {
-        int valor = 10;
-        proc alteraValor(int valor) {
+    classe Calculadora {
+        int valor = 0;
+        proc setValor(int valor) {
             this.valor := valor
+        },
+        proc soma(int valor) {
+            this.valor := this.valor + valor
+        },
+        proc subtrai(int valor) {
+            this.valor := this.valor - valor
         },
         proc print() {
             write(this.valor)
         }
     };
 
-    suite ContadorTeste {
-        Contador c := new Contador;
+    suite CalculadoraTeste {
+        Calculadora calc := new Calculadora;
         setup() {
-            skip
+            this.calc := new Calculadora;
+            assert(0, ((this).calc).valor)
         },
         teardown() {
-            skip
+            this.calc := null;
+            assert(null, this.calc)
         },
-        test verificaValorInicial() {
-            assert(10, ((this).c).valor)
+        test valorInicial() {
+            assert(0, ((this).calc).valor)
         },
-        test verificaAlteraValor() {
-            (this).c.alteraValor(9);
-            assert(9, ((this).c).valor)
+        test setValor() {
+            (this).calc.setValor(1);
+            assert(1, ((this).calc).valor)
+        },
+        test soma() {
+            (this).calc.setValor(3);
+            (this).calc.soma(2);
+            assert(5, ((this).calc).valor)
+        },
+        test subtrai() {
+            (this).calc.setValor(10);
+            (this).calc.subtrai(4);
+            assert(6, ((this).calc).valor)
         },
         test falhaEsperada() {
-            assert(20, ((this).c).valor)
+            assert(1, ((this).calc).valor)
         }
     };
 
     {
-        Contador c := new Contador;
-        write("Teste do write");
+        Calculadora c := new Calculadora;
         c.print()
     }
 }

@@ -2,11 +2,11 @@ package loo1.plp.orientadaObjetos1.unitTests;
 
 import loo1.plp.orientadaObjetos1.comando.ChamadaTeste;
 import loo1.plp.orientadaObjetos1.comando.Teste;
+import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecTesteSetup;
+import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecTesteTearDown;
 import loo1.plp.orientadaObjetos1.declaracao.variavel.DecVariavel;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseNaoDeclaradaException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ObjetoJaDeclaradoException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ObjetoNaoDeclaradoException;
+import loo1.plp.orientadaObjetos1.excecao.declaracao.*;
+import loo1.plp.orientadaObjetos1.excecao.execucao.EntradaInvalidaException;
 import loo1.plp.orientadaObjetos1.expressao.leftExpression.Id;
 import loo1.plp.orientadaObjetos1.expressao.valor.ValorRef;
 import loo1.plp.orientadaObjetos1.memoria.*;
@@ -41,13 +41,31 @@ public class TesteSuiteExecutor {
 
         for (Id nomeTeste: nomesTestes) {
             String idExecucao = idTesteSuite.toString() + "." + nomeTeste + "()";
+            boolean chamouTeardown = false;
             try {
-                Teste teste = defTesteSuite.getTeste(nomeTeste);
-                new ChamadaTeste(teste).executar(ctx);
+                executar(defTesteSuite.getSetup(), ctx);
+                executar(defTesteSuite.getTeste(nomeTeste), ctx);
+                chamouTeardown = true;
+                executar(defTesteSuite.getTearDown(), ctx);
                 TestRunner.addSuccess(idExecucao);
             } catch (Exception e) {
                TestRunner.addFailure(idExecucao, e);
+                try {
+                    if (!chamouTeardown) {
+                        executar(defTesteSuite.getTearDown(), ctx);
+                    }
+                } catch (Exception e2) {
+                    // do nothing
+                }
             }
+        }
+    }
+
+    private void executar(Teste teste, AmbienteExecucaoOO1 ctx)
+            throws ProcedimentoNaoDeclaradoException, ClasseNaoDeclaradaException, ProcedimentoJaDeclaradoException,
+            ObjetoNaoDeclaradoException, ObjetoJaDeclaradoException, ClasseJaDeclaradaException, EntradaInvalidaException {
+        if (teste != null) {
+            new ChamadaTeste(teste).executar(ctx);
         }
     }
 
