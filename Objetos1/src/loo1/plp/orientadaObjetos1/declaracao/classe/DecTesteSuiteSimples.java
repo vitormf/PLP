@@ -2,7 +2,6 @@ package loo1.plp.orientadaObjetos1.declaracao.classe;
 
 import loo1.plp.expressions2.memory.VariavelJaDeclaradaException;
 import loo1.plp.expressions2.memory.VariavelNaoDeclaradaException;
-import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecProcedimento;
 import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecTeste;
 import loo1.plp.orientadaObjetos1.declaracao.variavel.DecVariavel;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
@@ -12,7 +11,6 @@ import loo1.plp.orientadaObjetos1.excecao.declaracao.ProcedimentoNaoDeclaradoExc
 import loo1.plp.orientadaObjetos1.expressao.leftExpression.Id;
 import loo1.plp.orientadaObjetos1.memoria.AmbienteCompilacaoOO1;
 import loo1.plp.orientadaObjetos1.memoria.AmbienteExecucaoOO1;
-import loo1.plp.orientadaObjetos1.memoria.DefClasse;
 import loo1.plp.orientadaObjetos1.memoria.DefTesteSuite;
 import loo1.plp.orientadaObjetos1.util.TipoClasse;
 
@@ -51,4 +49,5 @@ public class DecTesteSuiteSimples extends DecClasseSimples implements DecTesteSu
 
         return ambiente;
     }
+
 }

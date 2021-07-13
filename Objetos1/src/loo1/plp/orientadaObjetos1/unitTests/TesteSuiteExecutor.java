@@ -1,20 +1,17 @@
 package loo1.plp.orientadaObjetos1.unitTests;
 
-import loo1.plp.orientadaObjetos1.comando.ChamadaProcedimento;
 import loo1.plp.orientadaObjetos1.comando.ChamadaTeste;
 import loo1.plp.orientadaObjetos1.comando.Teste;
-import loo1.plp.orientadaObjetos1.declaracao.classe.DecTesteSuite;
-import loo1.plp.orientadaObjetos1.declaracao.classe.DecTesteSuiteSimples;
 import loo1.plp.orientadaObjetos1.declaracao.variavel.DecVariavel;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.*;
-import loo1.plp.orientadaObjetos1.excecao.execucao.EntradaInvalidaException;
+import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
+import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseNaoDeclaradaException;
+import loo1.plp.orientadaObjetos1.excecao.declaracao.ObjetoJaDeclaradoException;
+import loo1.plp.orientadaObjetos1.excecao.declaracao.ObjetoNaoDeclaradoException;
 import loo1.plp.orientadaObjetos1.expressao.leftExpression.Id;
 import loo1.plp.orientadaObjetos1.expressao.valor.ValorRef;
 import loo1.plp.orientadaObjetos1.memoria.*;
-import loo1.plp.orientadaObjetos1.memoria.colecao.ListaValor;
 
 import java.util.Collection;
-import java.util.List;
 
 public class TesteSuiteExecutor {
 
@@ -27,13 +24,13 @@ public class TesteSuiteExecutor {
     public void executar(AmbienteExecucaoOO1 ambiente) throws ClasseNaoDeclaradaException, ObjetoNaoDeclaradoException, ObjetoJaDeclaradoException, ClasseJaDeclaradaException {
         DecVariavel decVariavel = defTesteSuite.getDecVariavel();
 
-        Id id = defTesteSuite.getIdClasse();
+        Id idTesteSuite = defTesteSuite.getIdClasse();
         AmbienteExecucaoOO1 aux = decVariavel.elabora(new ContextoExecucaoOO1(ambiente));
         ContextoObjeto estadoObj = new ContextoObjeto(aux.getPilha().pop());
-        Objeto objeto = new Objeto(id, estadoObj);
+        Objeto objeto = new Objeto(idTesteSuite, estadoObj);
 
 
-        Collection<Teste> testes = defTesteSuite.getTestes();
+        Collection<Id> nomesTestes = defTesteSuite.getNomesTestes();
 
 
         ContextoExecucaoOO1 ctx = new ContextoExecucaoOO1(ambiente);
@@ -42,14 +39,14 @@ public class TesteSuiteExecutor {
         ctx.changeValor(new Id("this"), vr);
 
 
-        for (Teste teste: testes) {
-            String testId = id.toString() + "." + "TODO";
+        for (Id nomeTeste: nomesTestes) {
+            String idExecucao = idTesteSuite.toString() + "." + nomeTeste + "()";
             try {
-
+                Teste teste = defTesteSuite.getTeste(nomeTeste);
                 new ChamadaTeste(teste).executar(ctx);
-                TestRunner.addSuccess(testId);
+                TestRunner.addSuccess(idExecucao);
             } catch (Exception e) {
-               TestRunner.addFailure(testId, e);
+               TestRunner.addFailure(idExecucao, e);
             }
         }
     }

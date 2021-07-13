@@ -1,7 +1,11 @@
 package loo1.plp.orientadaObjetos1.declaracao.procedimento;
 
+import loo1.plp.orientadaObjetos1.comando.Procedimento;
 import loo1.plp.orientadaObjetos1.comando.Teste;
+import loo1.plp.orientadaObjetos1.excecao.declaracao.ProcedimentoNaoDeclaradoException;
+import loo1.plp.orientadaObjetos1.expressao.leftExpression.Id;
 
+import java.util.Collection;
 import java.util.List;
 
 public class DecTesteComposta extends DecProcedimentoComposta implements DecTeste {
@@ -16,9 +20,20 @@ public class DecTesteComposta extends DecProcedimentoComposta implements DecTest
     }
 
     @Override
-    public List<Teste> getTestes() {
-        List<Teste> testes = declaracao1.getTestes();
-        testes.addAll(declaracao2.getTestes());
-        return testes;
+    public Collection<Id> getNomesTestes() {
+        Collection<Id> nomes = declaracao1.getNomesTestes();
+        nomes.addAll(declaracao2.getNomesTestes());
+        return nomes;
+    }
+
+    @Override
+    public Teste getTeste(Id id) throws ProcedimentoNaoDeclaradoException {
+        Teste teste;
+        try {
+            teste = declaracao1.getTeste(id);
+        } catch(ProcedimentoNaoDeclaradoException e) {
+            teste = declaracao2.getTeste(id);
+        }
+        return teste;
     }
 }
