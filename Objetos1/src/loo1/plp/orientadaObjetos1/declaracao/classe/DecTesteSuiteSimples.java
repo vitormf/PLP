@@ -3,6 +3,8 @@ package loo1.plp.orientadaObjetos1.declaracao.classe;
 import loo1.plp.expressions2.memory.VariavelJaDeclaradaException;
 import loo1.plp.expressions2.memory.VariavelNaoDeclaradaException;
 import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecTeste;
+import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecTesteSetup;
+import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecTesteTearDown;
 import loo1.plp.orientadaObjetos1.declaracao.variavel.DecVariavel;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseNaoDeclaradaException;
@@ -17,10 +19,14 @@ import loo1.plp.orientadaObjetos1.util.TipoClasse;
 public class DecTesteSuiteSimples extends DecClasseSimples implements DecTesteSuite {
 
     private DecTeste testes;
+    private DecTesteSetup setup;
+    private DecTesteTearDown teardown;
 
-    public DecTesteSuiteSimples(Id nomeTesteSuite, DecVariavel atributos, DecTeste testes) {
+    public DecTesteSuiteSimples(Id nomeTesteSuite, DecVariavel atributos, DecTeste testes, DecTesteSetup setup, DecTesteTearDown teardown) {
         super(nomeTesteSuite, atributos, testes);
         this.testes = testes;
+        this.setup = setup;
+        this.teardown = teardown;
     }
 
 

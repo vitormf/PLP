@@ -1106,12 +1106,23 @@ DecTesteSuite PDecTesteSuiteAtomica() :
 {
   Id nomeTesteSuite;
   DecVariavel atributos;
-  DecTeste testes;
+  DecTeste testes = null;
+  DecTesteSetup setup = null;
+  DecTesteTearDown teardown = null;
 }
 {
-  < TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > testes = PDecTeste() < RBRACE >
+  (
+    LOOKAHEAD( < TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > testes = PDecTeste() < RBRACE > )
+    < TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > testes = PDecTeste() < RBRACE >
+    | LOOKAHEAD(< TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > setup = PDecTesteSetup() < COMMA >  testes = PDecTeste() < RBRACE >)
+    < TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > setup = PDecTesteSetup() < COMMA >  testes = PDecTeste() < RBRACE >
+    | LOOKAHEAD(< TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > teardown = PDecTesteTearDown() < COMMA >  testes = PDecTeste() < RBRACE >)
+    < TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > teardown = PDecTesteTearDown() < COMMA >  testes = PDecTeste() < RBRACE >
+    | < TEST_SUITE > nomeTesteSuite = PId() < LBRACE > atributos = PDecVariavel() < SEMICOLON > setup = PDecTesteSetup() < COMMA > teardown = PDecTesteTearDown() < COMMA >  testes = PDecTeste() < RBRACE >
+
+  )
   {
-    return new DecTesteSuiteSimples(nomeTesteSuite, atributos, testes);
+    return new DecTesteSuiteSimples(nomeTesteSuite, atributos, testes, setup, teardown);
   }
 }
 
@@ -1331,6 +1342,29 @@ DecTeste PDecTesteSimples() :
   < TEST > nome = PId() < LPAREN > < RPAREN > < LBRACE > comando = PComando() < RBRACE >
   {
     return new DecTesteSimples(nome, comando);
+  }
+}
+
+
+DecTesteSetup PDecTesteSetup() :
+{
+    Comando comando;
+}
+{
+    < TEST_SETUP > < LPAREN > < RPAREN > < LBRACE > comando = PComando() < RBRACE >
+  {
+    return new DecTesteSetup(comando);
+  }
+}
+
+DecTesteTearDown PDecTesteTearDown() :
+{
+    Comando comando;
+}
+{
+    < TEST_TEARDOWN > < LPAREN > < RPAREN > < LBRACE > comando = PComando() < RBRACE >
+  {
+    return new DecTesteTearDown(comando);
   }
 }
 

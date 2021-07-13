@@ -11,6 +11,12 @@
 
     suite ContadorTeste {
         Contador c := new Contador;
+        setup() {
+            skip
+        },
+        teardown() {
+            skip
+        },
         test verificaValorInicial() {
             assert(10, ((this).c).valor)
         },
