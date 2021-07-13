@@ -42,8 +42,14 @@
             (this).calc.subtrai(4);
             assert(6, ((this).calc).valor)
         },
+        test testeAssertTrue() {
+            assertTrue(10 == 6+4)
+        },
+        test testeAssertFalse() {
+            assertFalse(10 == 1)
+        },
         test falhaEsperada() {
-            assert(1, ((this).calc).valor)
+            assert(true, false)
         }
     };
 

@@ -181,8 +181,8 @@ TOKEN : /* TESTES */
 | 	< TEST_TEARDOWN: "teardown" >
 | 	< TEST_SUITE: "suite" >
 | 	< ASSERT: "assert" >
-| 	< ASSERT_TRUE: "assert_true" >
-| 	< ASSERT_FALSE: "assert_false" >
+| 	< ASSERT_TRUE: "assertTrue" >
+| 	< ASSERT_FALSE: "assertFalse" >
 }
 
 TOKEN : /* TOKENS DOS POSSVEIS TIPOS */
@@ -360,6 +360,10 @@ Comando PComandoSimples() :
     retorno = PSkip()
   | LOOKAHEAD(< ASSERT >)
       retorno = PChamadaAssert()
+  | LOOKAHEAD(< ASSERT_TRUE >)
+      retorno = PChamadaAssertTrue()
+  | LOOKAHEAD(< ASSERT_FALSE >)
+      retorno = PChamadaAssertFalse()
   | LOOKAHEAD(< LBRACE >)
     retorno = PComDeclaracao()
   | LOOKAHEAD(< WHILE >)
@@ -488,11 +492,31 @@ ChamadaAssert PChamadaAssert() :
   Expressao right = null;
 }
 {
-  (
-    < ASSERT> < LPAREN > left = PExpressao() < COMMA> right = PExpressao() < RPAREN >
-  )
+  < ASSERT > < LPAREN > left = PExpressao() < COMMA> right = PExpressao() < RPAREN >
   {
     return new ChamadaAssert(left, right);
+  }
+}
+
+ChamadaAssertTrue PChamadaAssertTrue() :
+{
+  Expressao expressao = null;
+}
+{
+  < ASSERT_TRUE > < LPAREN > expressao = PExpressao() < RPAREN >
+  {
+    return new ChamadaAssertTrue(expressao);
+  }
+}
+
+ChamadaAssertFalse PChamadaAssertFalse() :
+{
+  Expressao expressao = null;
+}
+{
+  < ASSERT_FALSE > < LPAREN > expressao = PExpressao() < RPAREN >
+  {
+    return new ChamadaAssertFalse(expressao);
   }
 }
 
