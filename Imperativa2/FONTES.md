@@ -1,4 +1,6 @@
 ## NOVAS FEATURES BNF (com link para a classe) 
+_PS: Por simplicidade, esta BNF mostra apenas o que foi mudado e o que foi adicionado_.
+
 
 [Comando](Imperativa2/src/li2/plp/imperative1/command/Comando.java) ::= [Atribuicao](/Imperativa2/src/li2/plp/imperative1/command/Atribuicao.java) 
 
