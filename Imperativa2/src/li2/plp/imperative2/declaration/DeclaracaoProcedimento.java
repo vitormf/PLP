@@ -30,7 +30,7 @@ public class DeclaracaoProcedimento extends Declaracao {
 		return ambiente;
 	}
 
-	private Id getId() {
+	public Id getId() {
 		return this.id;
 	}
 

@@ -8,3 +8,7 @@
 */.settings
 
 */target
+/bin/
+**/parser/*.java
+.idea
+*.iml

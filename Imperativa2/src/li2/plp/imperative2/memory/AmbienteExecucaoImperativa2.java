@@ -11,5 +11,7 @@ public interface AmbienteExecucaoImperativa2 extends AmbienteExecucaoImperativa 
 
 	public DefProcedimento getProcedimento(Id idArg)
 			throws ProcedimentoNaoDeclaradoException;
+	
+	public boolean getTestar();
 
 }

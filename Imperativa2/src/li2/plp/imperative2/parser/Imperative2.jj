@@ -64,8 +64,9 @@ public class Imp2Parser {
             System.out.println("Imperativa 2 PLP Parser Version 0.0.1:  Imperativa2 program parsed successfully.");
             
             if(programa.checaTipo(new ContextoCompilacaoImperativa(entrada))) {
-                ListaValor saida = programa.executar(new ContextoExecucaoImperativa2(entrada));
-                System.out.println(saida);
+				boolean testar = args.length >= 2 && args[1].equalsIgnoreCase("test");
+				ListaValor saida = programa.executar(new ContextoExecucaoImperativa2(entrada, testar));
+                System.out.println(testar ? TestRunner.report() : saida);
             }
             else {
                 System.out.println("Erro de tipo");
@@ -132,6 +133,16 @@ TOKEN : /* TOKENS DE IMPERATIVA 2 */
 {
   < PROC: "proc" >
 | < CALL: "call" >
+}
+
+TOKEN : /* TESTES */
+{
+ 	< TEST: "test" >
+| 	< TEST_SETUP: "test_setup" >
+| 	< TEST_TEARDOWN: "test_teardown" >
+| 	< ASSERT: "assert" >
+| 	< ASSERT_TRUE: "assert_true" >
+| 	< ASSERT_FALSE: "assert_false" >
 }
 
 TOKEN : /* TOKENS DOS POSS�VEIS TIPOS */
@@ -644,6 +655,7 @@ Comando PComandoSimples() :
       | retorno = PIO()
       | <LPAREN> retorno = PComando() <RPAREN>
       | retorno = PChamadaProcedimento()
+      | retorno = PChamadaAssert()
    	)
     {
         return retorno;
@@ -661,6 +673,62 @@ ChamadaProcedimento PChamadaProcedimento():
 		return new ChamadaProcedimento(nomeProcedimento, parametrosAtuais);
 	}
 }
+
+Comando PChamadaAssert() :
+{
+	Comando retorno;
+}
+{
+    (
+    	retorno = PChamadaAssertEquals()
+      | retorno = PChamadaAssertTrue()
+      | retorno = PChamadaAssertFalse()
+   	)
+    {
+        return retorno;
+    }
+}
+
+ChamadaAssert PChamadaAssertEquals():
+{
+	Expressao esq;
+	Expressao dir;
+}
+{
+  	
+	
+	<ASSERT> <LPAREN> esq = PExpPrimaria() <COMMA> dir = PExpressao() <RPAREN>
+	{
+		return new ChamadaAssert(esq,dir);
+	}
+}
+
+ChamadaAssert PChamadaAssertTrue():
+{
+	Expressao exp;
+}
+{
+  	
+	
+	<ASSERT_TRUE> <LPAREN> exp = PExpressao() <RPAREN>
+	{
+		return new ChamadaAssert(new ValorBooleano(true),exp);
+	}
+}
+
+ChamadaAssert PChamadaAssertFalse():
+{
+	Expressao exp;
+}
+{
+  	
+	
+	<ASSERT_FALSE> <LPAREN> exp = PExpressao() <RPAREN>
+	{
+		return new ChamadaAssert(new ValorBooleano(false),exp);
+	}
+}
+
 
 ComandoDeclaracao PComandoDeclaracao() :
 {
@@ -686,9 +754,18 @@ Declaracao PDeclaracao():
            retorno = PDeclaracaoComposta()
           |LOOKAHEAD(PDeclaracaoProcedimento() <COMMA>)
            retorno = PDeclaracaoComposta() 
+          |LOOKAHEAD(PDeclaracaoTeste() <COMMA>)
+           retorno = PDeclaracaoComposta()
+          |LOOKAHEAD(PDeclaracaoTesteSetup() <COMMA>)
+           retorno = PDeclaracaoComposta()
+          |LOOKAHEAD(PDeclaracaoTesteTeardown() <COMMA>)
+           retorno = PDeclaracaoComposta()
 		  | retorno = PDeclaracaoVariavel()
 		  | retorno = PDeclaracaoProcedimento()
-          | <LPAREN> retorno = PDeclaracao() <RPAREN>   		 
+		  | retorno = PDeclaracaoTeste()
+		  | retorno = PDeclaracaoTesteSetup()
+		  | retorno = PDeclaracaoTesteTeardown()
+          | <LPAREN> retorno = PDeclaracao() <RPAREN>
 		  
 	)
 	{return retorno;}
@@ -705,6 +782,16 @@ DeclaracaoComposta PDeclaracaoComposta():
 	 
 	 |  LOOKAHEAD(PDeclaracaoProcedimento() <COMMA>)
 	 d1 = PDeclaracaoProcedimento() <COMMA> d2 = PDeclaracao()
+
+	 |  LOOKAHEAD(PDeclaracaoTeste() <COMMA>)
+	 d1 = PDeclaracaoTeste() <COMMA> d2 = PDeclaracao()
+	 
+	 |  LOOKAHEAD(PDeclaracaoTesteSetup() <COMMA>)
+	 d1 = PDeclaracaoTesteSetup() <COMMA> d2 = PDeclaracao()
+
+	 |  LOOKAHEAD(PDeclaracaoTesteTeardown() <COMMA>)
+	 d1 = PDeclaracaoTesteTeardown() <COMMA> d2 = PDeclaracao()
+
 	)
 	
 	{return new DeclaracaoComposta(d1, d2);}
@@ -745,6 +832,93 @@ DefProcedimento PDefProcedimento():
 	}
 	
 }
+
+DeclaracaoTeste PDeclaracaoTeste():
+{
+	Id nome;
+	DefTeste defTeste;
+}
+{
+    (
+    	<TEST> nome = PId() <LPAREN> <RPAREN> defTeste = PDefTeste()
+    )
+	{
+	    return new DeclaracaoTeste (nome, defTeste);
+	}
+}
+
+DeclaracaoTesteSetup PDeclaracaoTesteSetup():
+{
+	DefTesteSetup defTeste;
+}
+{
+    (
+    	<TEST_SETUP> <LPAREN> <RPAREN> defTeste = PDefTesteSetup()
+    )
+	{
+	    return new DeclaracaoTesteSetup (defTeste);
+	}
+}
+
+DeclaracaoTesteTeardown PDeclaracaoTesteTeardown():
+{
+	DefTesteTeardown defTeste;
+}
+{
+    (
+    	<TEST_TEARDOWN> <LPAREN> <RPAREN> defTeste = PDefTesteTeardown()
+    )
+	{
+	    return new DeclaracaoTesteTeardown (defTeste);
+	}
+}
+
+
+
+DefTeste PDefTeste():
+{
+	Comando comando;
+}
+{
+    (
+		<LBRACE> comando = PComando() <RBRACE>
+    )
+	{
+	    return new DefTeste (comando);
+	}
+	
+}
+
+DefTesteSetup PDefTesteSetup():
+{
+	Comando comando;
+}
+{
+    (
+		<LBRACE> comando = PComando() <RBRACE>
+    )
+	{
+	    return new DefTesteSetup (comando);
+	}
+
+}
+
+DefTesteTeardown PDefTesteTeardown():
+{
+	Comando comando;
+}
+{
+    (
+		<LBRACE> comando = PComando() <RBRACE>
+    )
+	{
+	    return new DefTesteTeardown (comando);
+	}
+
+}
+
+
+
 
 Tipo PTipo():
 {

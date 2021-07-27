@@ -4,9 +4,19 @@ import li2.plp.expressions2.expression.Id;
 import li2.plp.expressions2.memory.Contexto;
 import li2.plp.expressions2.memory.VariavelJaDeclaradaException;
 import li2.plp.expressions2.memory.VariavelNaoDeclaradaException;
+import li2.plp.imperative1.memory.AmbienteExecucaoImperativa;
 import li2.plp.imperative1.memory.ContextoExecucaoImperativa;
 import li2.plp.imperative1.memory.ListaValor;
+import li2.plp.imperative2.TestRunner;
+import li2.plp.imperative2.command.ChamadaTeste;
 import li2.plp.imperative2.declaration.DefProcedimento;
+import li2.plp.imperative2.declaration.DefTeste;
+import li2.plp.imperative2.declaration.DefTesteSetup;
+import li2.plp.imperative2.declaration.DefTesteTeardown;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 		implements AmbienteExecucaoImperativa2 {
@@ -16,13 +26,16 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 	 * armazena apenas procedimentos.
 	 */
 	private Contexto<DefProcedimento> contextoProcedimentos;
+	
+	private boolean testar;
 
 	/**
 	 * Construtor da classe.
 	 */
-	public ContextoExecucaoImperativa2(ListaValor entrada) {
+	public ContextoExecucaoImperativa2(ListaValor entrada, boolean testar) {
 		super(entrada);
 		contextoProcedimentos = new Contexto<DefProcedimento>();
+		this.testar = testar;
 	}
 
 	@Override
@@ -33,8 +46,52 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 
 	@Override
 	public void restaura() {
+		if (testar) {
+			executaTestes();
+		}
 		super.restaura();
 		this.contextoProcedimentos.restaura();
+	}
+
+	private void executaTestes() {
+		HashMap<Id, DefProcedimento> procedimentos = contextoProcedimentos.observa();
+
+		List<Id> testes = new ArrayList<>();
+		Id setup = null;
+		Id teardown = null;
+
+		for (Id id : procedimentos.keySet()) {
+			DefProcedimento proc = procedimentos.get(id);
+			if (proc instanceof DefTesteSetup) {
+				setup = id;
+			} else if (proc instanceof DefTesteTeardown) {
+				teardown = id;
+			} else if (proc instanceof DefTeste) {
+				testes.add(id);
+			}
+		}
+
+		for (Id id : testes) {
+			try {
+				if (setup != null) {
+					new ChamadaTeste(setup).executar(this);
+				}
+				new ChamadaTeste(id).executar(this);
+				TestRunner.addSuccess(id);
+			} catch (Exception exc) {
+				TestRunner.addFailure(id, exc);
+			} finally {
+				if (teardown != null) {
+					try {
+						new ChamadaTeste(teardown).executar(this);
+					} catch (Exception exc) {
+						TestRunner.addFailure(id, exc);
+					}
+				}
+			}
+		}
+
+
 	}
 
 	/**
@@ -68,5 +125,9 @@ public class ContextoExecucaoImperativa2 extends ContextoExecucaoImperativa
 			throw new ProcedimentoNaoDeclaradoException(idArg);
 		}
 
+	}
+	
+	public boolean getTestar() {
+		return testar;
 	}
 }
