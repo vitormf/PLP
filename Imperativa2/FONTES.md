@@ -28,9 +28,9 @@ _PS: Por simplicidade, esta BNF mostra apenas o que foi mudado e o que foi adici
 
 [DeclaracaoTestes](/Imperativa2/src/li2/plp/imperative2/declaration/DeclaracaoTeste.java) ::= [[DeclaracaoTesteSetup](/Imperativa2/src/li2/plp/imperative2/declaration/DeclaracaoTesteSetup.java) ] [DeclaracaoTeste](/Imperativa2/src/li2/plp/imperative2/declaration/DefTeste.java) [[DeclaracaoTesteTearDown](/Imperativa2/src/li2/plp/imperative2/declaration/DefTesteTeardown.java)]
 
-DeclaracaoTeste ::= DecTest | DecTestComposto
+[DeclaracaoTestes](/Imperativa2/src/li2/plp/imperative2/declaration/DeclaracaoTeste.java) ::= [DecTest](/Imperativa2/src/li2/plp/imperative2/declaration/DefTeste.java) | DecTestComposto
 
-DecTestComposto ::= DecTest | DecTestComposto
+DecTestComposto ::= [DecTest](/Imperativa2/src/li2/plp/imperative2/declaration/DefTeste.java) | DecTestComposto
 
 [DecTest](/Imperativa2/src/li2/plp/imperative2/declaration/DefTeste.java) ::= "test" ID "(" ")" "{" Comando "}"
 
