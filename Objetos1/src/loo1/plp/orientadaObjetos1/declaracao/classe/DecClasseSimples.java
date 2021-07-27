@@ -3,6 +3,7 @@ package loo1.plp.orientadaObjetos1.declaracao.classe;
 import loo1.plp.expressions2.memory.VariavelJaDeclaradaException;
 import loo1.plp.expressions2.memory.VariavelNaoDeclaradaException;
 import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecProcedimento;
+import loo1.plp.orientadaObjetos1.declaracao.procedimento.DecTeste;
 import loo1.plp.orientadaObjetos1.declaracao.variavel.DecVariavel;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseNaoDeclaradaException;
@@ -31,8 +32,7 @@ public class DecClasseSimples implements DecClasse {
 	 * Metodos da classe.
 	 */
     protected DecProcedimento metodos;
-    
-    
+
 	/**
 	 * Construtor.
 	 * @param nomeClasse Nome da classe

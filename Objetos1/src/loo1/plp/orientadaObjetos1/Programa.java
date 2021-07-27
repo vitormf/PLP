@@ -4,17 +4,19 @@ import loo1.plp.expressions2.memory.VariavelJaDeclaradaException;
 import loo1.plp.expressions2.memory.VariavelNaoDeclaradaException;
 import loo1.plp.orientadaObjetos1.comando.Comando;
 import loo1.plp.orientadaObjetos1.declaracao.classe.DecClasse;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseNaoDeclaradaException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ObjetoJaDeclaradoException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ObjetoNaoDeclaradoException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ProcedimentoJaDeclaradoException;
-import loo1.plp.orientadaObjetos1.excecao.declaracao.ProcedimentoNaoDeclaradoException;
+import loo1.plp.orientadaObjetos1.declaracao.classe.DecTesteSuite;
+import loo1.plp.orientadaObjetos1.excecao.declaracao.*;
 import loo1.plp.orientadaObjetos1.excecao.execucao.EntradaInvalidaException;
 import loo1.plp.orientadaObjetos1.excecao.execucao.EntradaNaoFornecidaException;
 import loo1.plp.orientadaObjetos1.memoria.AmbienteCompilacaoOO1;
 import loo1.plp.orientadaObjetos1.memoria.AmbienteExecucaoOO1;
+import loo1.plp.orientadaObjetos1.memoria.DefTesteSuite;
 import loo1.plp.orientadaObjetos1.memoria.colecao.ListaValor;
+import loo1.plp.orientadaObjetos1.unitTests.TestRunner;
+import loo1.plp.orientadaObjetos1.unitTests.TesteSuiteExecutor;
+
+import java.util.Collection;
+
 /**
  * Classe que representa um programa na linguagem OO.
  */
@@ -28,14 +30,20 @@ public class Programa {
      */
     private Comando comando;
 
+    private DecTesteSuite decTesteSuite;
+
+    private boolean testar;
+
     /**
      * Construtor.
      * @param decClasse A declara�ao de classe(s)
      * @param comando O comando executado ap�s a declara�ao.
      */
-    public Programa(DecClasse decClasse, Comando comando){
+    public Programa(DecClasse decClasse, Comando comando, DecTesteSuite decTesteSuite, boolean testar){
         this.decClasse = decClasse;
         this.comando = comando;
+        this.decTesteSuite = decTesteSuite;
+        this.testar = testar;
     }
 
      /**
@@ -63,6 +71,18 @@ public class Programa {
         //de declarar vari�veis antes de uma declara��o de classes
         //ambiente.incrementa();
         ambiente = comando.executar(decClasse.elabora(ambiente));
+
+        if (testar) {
+            System.out.println("\nIniciando testes");
+
+            ambiente = decTesteSuite.elabora(ambiente);
+            Collection<DefTesteSuite> defTesteSuites = ambiente.getDefTesteSuites();
+            for (DefTesteSuite suite : defTesteSuites) {
+                TesteSuiteExecutor executor = new TesteSuiteExecutor(suite);
+                executor.executar(ambiente);
+            }
+            System.out.println(TestRunner.report());
+        }
         //ambiente.restaura();
         return ambiente.getSaida();
     }

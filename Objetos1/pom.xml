@@ -38,7 +38,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <configuration>
           <mainClass>loo1.plp.orientadaObjetos1.parser.OO1Parser</mainClass>
-          <commandlineArgs>input</commandlineArgs>
+          <commandlineArgs>input test</commandlineArgs>
         </configuration>
       </plugin>
       <plugin>
