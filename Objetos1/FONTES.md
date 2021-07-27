@@ -7,13 +7,7 @@ _PS: Por simplicidade, esta BNF mostra apenas o que foi mudado e o que foi adici
 
 [DecTestSuiteComposta](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/classe/DecTesteSuiteComposta.java) ::= [DecTestSuiteAtomica](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/classe/DecTesteSuiteSimples.java) "," [DecTestSuite](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/classe/DecTesteSuite.java)
 
-DecTestSuiteAtomica ::= "suite" Id "{" DecVariavel ";" DecTeste "}"  
-
-> | "suite" Id "{" DecVariavel ";" DeclaracaoTesteSetup ";" DecTeste "}"  
-
-> | "suite" Id "{" DecVariavel ";" DeclaracaoTesteTearDown ";" DecTeste "}"  
-
-> | "suite" Id "{" DecVariavel ";" [DeclaracaoTesteSetup](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/procedimento/DecTesteSetup.java) ";" [DeclaracaoTesteTearDown](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/procedimento/DecTesteTearDown.java) ";" [DecTeste](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/procedimento/DecTeste.java) "}"
+DecTestSuiteAtomica ::= "suite" Id "{" DecVariavel ";" ([DeclaracaoTesteSetup](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/procedimento/DecTesteSetup.java) ";") ([DeclaracaoTesteTearDown](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/procedimento/DecTesteTearDown.java) ";") [DecTeste](https://github.com/vitormf/PLP/blob/oo1-unit-test/Objetos1/src/loo1/plp/orientadaObjetos1/declaracao/procedimento/DecTeste.java) "}"
 
 DeclaracaoTesteSetup ::= "setup" "(" ")" "{" Comando "}"
 
