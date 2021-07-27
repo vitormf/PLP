@@ -1,5 +1,6 @@
 package loo1.plp.orientadaObjetos1.memoria;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -34,7 +35,9 @@ public class ContextoCompilacaoOO1 implements AmbienteCompilacaoOO1 {
      * mapeamento de classes do contexto.
      * nao � necessaria uma pilha, pois ha apenas um nivel de mapeamentos
      */
-    private HashMap<Id, DefClasse> mapDefClasse;  
+    private HashMap<Id, DefClasse> mapDefClasse;
+
+    private HashMap<Id, DefTesteSuite> mapDefTesteSuite;
 
      /**
      * A tail de valores inicias do contexto.
@@ -48,6 +51,7 @@ public class ContextoCompilacaoOO1 implements AmbienteCompilacaoOO1 {
         pilha = new Stack<HashMap<Id, Tipo>>();
         pilhaProcedimento = new Stack<HashMap<Id, ListaDeclaracaoParametro>>();
         mapDefClasse = new HashMap<Id, DefClasse>();  //cria mapeamento ids def classes
+        mapDefTesteSuite = new HashMap<>();
         this.entrada = entrada;
     }
 
@@ -104,6 +108,13 @@ public class ContextoCompilacaoOO1 implements AmbienteCompilacaoOO1 {
     public void mapDefClasse(Id idArg, DefClasse defClasse)
         throws ClasseJaDeclaradaException {
         if (mapDefClasse.put(idArg, defClasse) != null) {
+            throw new ClasseJaDeclaradaException(idArg);
+        }
+    }
+
+    @Override
+    public void mapDefTesteSuite(Id idArg, DefTesteSuite defTesteSuite) throws ClasseJaDeclaradaException {
+        if (mapDefClasse.put(idArg, defTesteSuite) != null) {
             throw new ClasseJaDeclaradaException(idArg);
         }
     }
@@ -177,6 +188,22 @@ public class ContextoCompilacaoOO1 implements AmbienteCompilacaoOO1 {
         } else {
             return result;
         }
+    }
+
+    @Override
+    public DefTesteSuite getDefTesteSuite(Id idArg) throws ClasseNaoDeclaradaException {
+        DefTesteSuite result = null;
+        result = this.mapDefTesteSuite.get(idArg);
+        if (result == null) {
+            throw new ClasseNaoDeclaradaException(idArg);
+        } else {
+            return result;
+        }
+    }
+
+    @Override
+    public Collection<DefTesteSuite> getDefTesteSuites() {
+        return this.mapDefTesteSuite.values();
     }
 
     /**

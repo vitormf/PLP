@@ -22,6 +22,7 @@ public interface DecProcedimento {
      */
     public Procedimento getProcedimento(Id nomeProcedimento)
         throws ProcedimentoNaoDeclaradoException;
+
     /**
      * Verifica se a declara��o est� bem tipada, ou seja, se a
      * express�o de inicializa��o est� bem tipada.

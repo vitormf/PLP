@@ -5,6 +5,9 @@ import loo1.plp.expressions2.memory.Ambiente;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseJaDeclaradaException;
 import loo1.plp.orientadaObjetos1.excecao.declaracao.ClasseNaoDeclaradaException;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Interface que representa um ambiente.
  */
@@ -23,6 +26,9 @@ public interface AmbienteOO1<T> extends Ambiente<T>{
 	public void mapDefClasse(Id idArg, DefClasse defClasse)
 			throws ClasseJaDeclaradaException;
 
+	public void mapDefTesteSuite(Id idArg, DefTesteSuite defTesteSuite)
+			throws ClasseJaDeclaradaException;
+
 	/**
 	 * Obt�m a defini��o da classe cujo nome � idArg
 	 * 
@@ -33,6 +39,10 @@ public interface AmbienteOO1<T> extends Ambiente<T>{
 	 *             quando nao foi declarada nenhuma classe com esse nome.
 	 */
 	public DefClasse getDefClasse(Id idArg) throws ClasseNaoDeclaradaException;
+
+	public DefTesteSuite getDefTesteSuite(Id idArg) throws ClasseNaoDeclaradaException;
+
+	public Collection<DefTesteSuite> getDefTesteSuites();
 	
 	
 }

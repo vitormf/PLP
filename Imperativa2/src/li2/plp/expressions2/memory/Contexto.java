@@ -28,6 +28,10 @@ public class Contexto<T> {
 		pilha.push(new HashMap<Id, T>());
 	}
 
+	public HashMap<Id, T> observa() {
+		return pilha.peek();
+	}
+
 	public void restaura() {
 		pilha.pop();
 	}

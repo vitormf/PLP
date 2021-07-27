@@ -3,7 +3,9 @@ package loo1.plp.orientadaObjetos1.memoria;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import loo1.plp.expressions2.expression.Id;
@@ -36,6 +38,8 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 */
     private HashMap<Id, DefClasse> mapDefClasse;
 
+    private HashMap<Id, DefTesteSuite> mapDefTesteSuite;
+
     /**
 	 * o mapeamento de objetos do contexto.
 	 */
@@ -57,16 +61,21 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 */
     private ValorRef proxRef;
 
+    private boolean testar;
+
     /**
 	 * Construtor utilizado quando queremos ler do teclado.
 	 */
-    public ContextoExecucaoOO1(){
+    public ContextoExecucaoOO1(boolean testar){
+        this.testar = testar;
+
         pilha = new Stack<HashMap<Id, Valor>>();
 
         mapObjetos = new HashMap<ValorRef, Objeto>();              	
 
         mapDefClasse = new HashMap<Id, DefClasse>();    // criacao do mapeamento de classes
-        
+        mapDefTesteSuite = new HashMap<>();
+
         this.entrada = null;
         this.saida = new ListaValor();
     }
@@ -78,8 +87,10 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
        proxRef = ambiente.getRef();
        this.mapObjetos = ambiente.getMapObjetos();
        this.mapDefClasse = ambiente.getMapDefClasse();
+       this.mapDefTesteSuite = ambiente.getMapDefTesteSuite();
        this.entrada = ambiente.getEntrada();
        this.saida = ambiente.getSaida();
+       this.testar = ambiente.getTestar();
        pilha = new Stack<HashMap<Id, Valor>>();
 	   HashMap<Id, Valor> aux = new HashMap<Id, Valor>();
        aux.put(new Id("this"), new ValorNull());
@@ -93,15 +104,18 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 * @param entrada
 	 *            Entrada para o contexto de execu��o.
 	 */
-    public ContextoExecucaoOO1(ListaValor entrada){
+    public ContextoExecucaoOO1(ListaValor entrada, boolean testar){
         pilha = new Stack<HashMap<Id, Valor>>();
 
         mapObjetos = new HashMap<ValorRef, Objeto>();       
 
         mapDefClasse = new HashMap<Id, DefClasse>();    // inicializacao do map
+
+        mapDefTesteSuite = new HashMap<>();
         
         this.entrada = entrada;
         this.saida = new ListaValor();
+        this.testar = testar;
     }
 
     /**
@@ -127,7 +141,11 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 * @return a pilha com as defini�oes das classes.
 	 */
     public HashMap<Id, DefClasse> getMapDefClasse(){
-       return this.mapDefClasse;
+        return this.mapDefClasse;
+    }
+
+    public HashMap<Id, DefTesteSuite> getMapDefTesteSuite(){
+        return this.mapDefTesteSuite;
     }
 
     /**
@@ -177,7 +195,7 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 * Este m�todo l� uma entrada que pode ser de uma tail ou do teclado
 	 * 
 	 * @return Obt�m uma entrada que pode ser de uma tail ou do teclado
-	 * @exception Lan�a
+	 * @exception EntradaInvalidaException
 	 *                uma exce��o se a tail com os valores nao tiver mais
 	 *                elementos.
 	 */
@@ -263,9 +281,16 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 * Restaura o estado do ambiente.
 	 */
     public void restaura(){
+        if (testar) {
+            executaTestes();
+        }
         pilha.pop();
         // pilhaDefClasse.pop(); // n�o restaura
         // pilhaObjeto.pop(); // n�o restaura
+    }
+
+    private void executaTestes() {
+        // TODO
     }
 
     /**
@@ -300,6 +325,13 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
     public void mapDefClasse(Id idArg, DefClasse defClasse)
         throws ClasseJaDeclaradaException {
 		if (this.mapDefClasse.put(idArg, defClasse) != null) {
+            throw new ClasseJaDeclaradaException(idArg);
+        }
+    }
+
+    @Override
+    public void mapDefTesteSuite(Id idArg, DefTesteSuite defTesteSuite) throws ClasseJaDeclaradaException {
+        if (this.mapDefTesteSuite.put(idArg, defTesteSuite) != null) {
             throw new ClasseJaDeclaradaException(idArg);
         }
     }
@@ -399,6 +431,18 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
         return result;
     }
 
+    @Override
+    public DefTesteSuite getDefTesteSuite(Id idArg) throws ClasseNaoDeclaradaException {
+        DefTesteSuite result = null;
+        result = this.mapDefTesteSuite.get(idArg);
+        return result;
+    }
+
+    @Override
+    public Collection<DefTesteSuite> getDefTesteSuites() {
+        return this.mapDefTesteSuite.values();
+    }
+
     /**
 	 * Obt�m o objeto associado a um dado valor referencia.
 	 * 
@@ -480,7 +524,7 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
 	 *         de mapeamentos id/valor.
 	 */
     public ContextoExecucaoOO1 getContextoIdValor() {
-        ContextoExecucaoOO1 ambiente = new ContextoExecucaoOO1(this.getEntrada());
+        ContextoExecucaoOO1 ambiente = new ContextoExecucaoOO1(this.getEntrada(), this.testar);
         ambiente.pilha = this.pilha;
         ambiente.saida = this.saida;
         return ambiente;
@@ -512,6 +556,11 @@ public class ContextoExecucaoOO1 implements AmbienteExecucaoOO1 {
         } else {
             return result;
         }
-    }    
+    }
+
+    @Override
+    public boolean getTestar() {
+        return testar;
+    }
 
 }

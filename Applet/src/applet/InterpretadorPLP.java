@@ -34,6 +34,7 @@ public class InterpretadorPLP extends JFrame {
 	MultiInterpretador interpreter;
 
 	private JButton jButtonExecutar = null;
+	private JButton jButtonTestar = null;
 	JTextField jTextFieldListaEntrada = null;
 	private JLabel jLabelListaEntrada = null;
 	private InterpreterKeyListener listener;
@@ -91,7 +92,7 @@ public class InterpretadorPLP extends JFrame {
 			jLabelListaEntrada.setBounds(new java.awt.Rectangle(20, 194, 127,
 					20));
 			jLabelListaEntrada
-					.setToolTipText("informe os valores da lista de entrada separados por espaços");
+					.setToolTipText("informe os valores da lista de entrada separados por espaÃ§os");
 			jLabelListaEntrada.setText("Lista de Entrada");
 			jLabelExecutar = new JLabel();
 			jLabelExecutar.setBounds(new java.awt.Rectangle(19, 434, 157, 17));
@@ -101,7 +102,7 @@ public class InterpretadorPLP extends JFrame {
 			jLabelMasg.setText("Mensagens");
 			jLabelCodigo = new JLabel();
 			jLabelCodigo.setBounds(new java.awt.Rectangle(20, 33, 70, 16));
-			jLabelCodigo.setText("Código");
+			jLabelCodigo.setText("CÃ³digo");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			jContentPane.add(getJScrollPaneMensagens(), null);
@@ -109,9 +110,10 @@ public class InterpretadorPLP extends JFrame {
 			jContentPane.add(jLabelMasg, null);
 			jContentPane.add(getJScrollPaneCodigo(), null);
 			jContentPane.add(getJTextFieldListaEntrada(), null);
-			jContentPane.add(getJComboBoxLinguagens(), null);
 			jContentPane.add(jLabelExecutar, null);
-			jContentPane.add(getJButton(), null);
+			jContentPane.add(getButtonExecutar(), null);
+			jContentPane.add(getButtonTestar(), null);
+			jContentPane.add(getJComboBoxLinguagens(), null);
 			jContentPane.add(jLabelListaEntrada, null);
 		}
 		return jContentPane;
@@ -183,7 +185,7 @@ public class InterpretadorPLP extends JFrame {
 		if (jComboBoxLinguagens == null) {
 			jComboBoxLinguagens = new JComboBox();
 			jComboBoxLinguagens
-					.setBounds(new java.awt.Rectangle(19, 7, 250, 20));
+					.setBounds(new java.awt.Rectangle(19, 7, 150, 20));
 			jComboBoxLinguagens
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -198,6 +200,16 @@ public class InterpretadorPLP extends JFrame {
 								jTextFieldListaEntrada.setEnabled(true);
 								break;
 							}
+							
+							switch (jComboBoxLinguagens.getSelectedIndex()) {
+							case 6:
+							case 7:
+									jButtonTestar.setEnabled(true);
+								break;
+							default:
+								jButtonTestar.setEnabled(false);
+								break;
+							}
 						}
 					});
 			jComboBoxLinguagens.addItem("Expressoes 1");
@@ -210,6 +222,7 @@ public class InterpretadorPLP extends JFrame {
 			jComboBoxLinguagens.addItem("Orientada a Objetos 1");
 			jComboBoxLinguagens.addItem("Orientada a Objetos 2");			
 
+			jComboBoxLinguagens.setSelectedIndex(7);
 		}
 		return jComboBoxLinguagens;
 	}
@@ -219,10 +232,10 @@ public class InterpretadorPLP extends JFrame {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getJButton() {
+	private JButton getButtonExecutar() {
 		if (jButtonExecutar == null) {
 			jButtonExecutar = new JButton();
-			jButtonExecutar.setBounds(new java.awt.Rectangle(283, 8, 86, 19));
+			jButtonExecutar.setBounds(new java.awt.Rectangle(183, 8, 86, 19));
 			jButtonExecutar.setText("executar");
 			jButtonExecutar
 					.addActionListener(new java.awt.event.ActionListener() {
@@ -232,11 +245,31 @@ public class InterpretadorPLP extends JFrame {
 									.getText();
 							interpreter.interpretarCodigo(sourceCode,
 									listaEntrada, jComboBoxLinguagens
-											.getSelectedIndex());
+											.getSelectedIndex(), false);
 						}
 					});
 		}
 		return jButtonExecutar;
+	}
+	
+	private JButton getButtonTestar() {
+		if (jButtonTestar == null) {
+			jButtonTestar = new JButton();
+			jButtonTestar.setBounds(new java.awt.Rectangle(283, 8, 86, 19));
+			jButtonTestar.setText("testar");
+			jButtonTestar
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							String sourceCode = jTextAreaCodigo.getText();
+							String listaEntrada = jTextFieldListaEntrada
+									.getText();
+							interpreter.interpretarCodigo(sourceCode,
+									listaEntrada, jComboBoxLinguagens
+											.getSelectedIndex(), true);
+						}
+					});
+		}
+		return jButtonTestar;
 	}
 
 	/**
@@ -250,7 +283,7 @@ public class InterpretadorPLP extends JFrame {
 			jTextFieldListaEntrada.setBounds(new java.awt.Rectangle(20, 218,
 					350, 20));
 			jTextFieldListaEntrada
-					.setToolTipText("informe os valores da lista de entrada separados por espaços");
+					.setToolTipText("informe os valores da lista de entrada separados por espaÃ§os");
 		}
 		return jTextFieldListaEntrada;
 	}
@@ -275,7 +308,7 @@ class InterpreterKeyListener implements KeyListener {
 			String sourceCode = this.frame.jTextAreaCodigo.getText();
 			String listaEntrada = this.frame.jTextFieldListaEntrada.getText();
 			this.frame.interpreter.interpretarCodigo(sourceCode, listaEntrada,
-					this.frame.jComboBoxLinguagens.getSelectedIndex());
+					this.frame.jComboBoxLinguagens.getSelectedIndex(), false);
 		}
 	}
 
