@@ -32,7 +32,7 @@ DecTestComposto ::= DecTest | DecTestComposto
 
 [DecTest](/Imperativa2/src/li2/plp/imperative2/declaration/DefTeste.java) ::= "test" ID "(" ")" "{" Comando "}"
 
-[DeclaracaoTesteSetup](/Imperativa2/src/li2/plp/imperative2/declaration/DeclaracaoTesteSetup.java) ] ::= "test_setup" "(" ")" "{" Comando "}"
+[DeclaracaoTesteSetup](/Imperativa2/src/li2/plp/imperative2/declaration/DeclaracaoTesteSetup.java) ::= "test_setup" "(" ")" "{" Comando "}"
 
 [DeclaracaoTesteTearDown](/Imperativa2/src/li2/plp/imperative2/declaration/DefTesteTeardown.java) ::= "test_teardown" "(" ")" "{" Comando "}"
 
